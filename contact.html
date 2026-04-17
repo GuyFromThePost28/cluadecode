@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact — ClickReady Sites</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --green:   #22c55e;
+      --green-dk:#16a34a;
+      --bg:      #0a0a0a;
+      --bg2:     #111111;
+      --text:    #f1f5f9;
+      --muted:   #94a3b8;
+      --border:  #1e1e1e;
+      --radius:  12px;
+    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: var(--text); background: var(--bg); line-height: 1.6; }
+    nav { position: sticky; top: 0; z-index: 100; background: rgba(10,10,10,0.95); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .logo { font-size: 1.25rem; font-weight: 800; color: #fff; letter-spacing: -0.5px; text-decoration: none; }
+    .logo span { color: var(--green); }
+    nav ul { list-style: none; display: flex; gap: 32px; }
+    nav ul a { text-decoration: none; color: var(--muted); font-weight: 500; font-size: 0.95rem; transition: color 0.2s; }
+    nav ul a:hover, nav ul a.active { color: var(--green); }
+    .nav-cta { background: var(--green) !important; color: #0a0a0a !important; padding: 8px 20px; border-radius: 8px; }
+    .btn { display: inline-block; padding: 14px 32px; border-radius: 10px; font-size: 1rem; font-weight: 700; text-decoration: none; transition: transform 0.15s; cursor: pointer; border: none; font-family: inherit; }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary { background: var(--green); color: #0a0a0a; box-shadow: 0 0 16px rgba(34,197,94,0.35); width: 100%; text-align: center; }
+    .btn-primary:hover { background: var(--green-dk); }
+    .contact-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; max-width: 900px; margin: 0 auto; }
+    .contact-perks { list-style: none; }
+    .contact-perks li { padding: 8px 0; color: var(--muted); font-size: 0.95rem; display: flex; gap: 10px; }
+    .contact-perks li::before { content: '→'; color: var(--green); font-weight: 700; }
+    form { display: flex; flex-direction: column; gap: 14px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    input, textarea { width: 100%; padding: 12px 16px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.95rem; font-family: inherit; color: var(--text); background: #111; transition: border-color 0.2s; }
+    input:focus, textarea:focus { outline: none; border-color: var(--green); box-shadow: 0 0 0 3px rgba(34,197,94,0.1); }
+    textarea { resize: vertical; min-height: 120px; }
+    footer { background: #050505; color: #94a3b8; text-align: center; padding: 36px 24px; }
+    footer .logo { display: block; margin-bottom: 8px; }
+    footer p { font-size: 0.875rem; }
+    @media (max-width: 640px) { nav ul { display: none; } .form-row { grid-template-columns: 1fr; } .contact-wrap { grid-template-columns: 1fr; gap: 32px; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">ClickReady<span>Sites</span></a>
+  <ul>
+    <li><a href="about.html">About Me</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="portfolio.html">Portfolio</a></li>
+    <li><a href="contact.html" class="active">Contact</a></li>
+    <li><a href="contact.html" class="nav-cta">Get a Quote</a></li>
+  </ul>
+</nav>
+
+<section style="padding: 80px 24px; background: var(--bg2);">
+  <div style="max-width:1100px; margin:0 auto;">
+    <div style="text-align:center; font-size:0.8rem; font-weight:700; letter-spacing:1.5px; color:var(--green); text-transform:uppercase; margin-bottom:12px;">Contact</div>
+    <h1 style="text-align:center; font-size:clamp(1.6rem,3vw,2.2rem); font-weight:800; letter-spacing:-0.5px; margin-bottom:12px;">Let's Build Your Site</h1>
+    <p style="text-align:center; color:var(--muted); max-width:500px; margin:0 auto 48px;">Fill out the form and I'll get back to you within 12-24 hours — no pressure, no commitment.</p>
+    <div class="contact-wrap">
+
+      <div>
+        <h2 style="font-size:1.4rem; font-weight:800; margin-bottom:12px;">What happens next?</h2>
+        <p style="color:var(--muted); margin-bottom:24px;">Send a message and I'll reach out to learn about your business and what you need.</p>
+        <ul class="contact-perks">
+          <li>Free consultation call</li>
+          <li>Custom quote — no surprises</li>
+          <li>You approve everything before launch</li>
+          <li>You keep 100% ownership of your site</li>
+        </ul>
+      </div>
+
+      <div>
+        <form id="contact-form" action="https://formspree.io/f/xjgjwwjr" method="POST">
+          <div class="form-row">
+            <input type="text" name="name" placeholder="Your Name" required>
+            <input type="text" name="business" placeholder="Business Name">
+          </div>
+          <input type="email" name="email" placeholder="Your Email" required>
+          <textarea name="message" placeholder="Tell me about your business and what you need..."></textarea>
+          <button type="submit" class="btn btn-primary" id="submit-btn">Send Message →</button>
+        </form>
+        <div id="form-success" style="display:none; text-align:center; padding:32px; background:rgba(34,197,94,0.1); border:1px solid #22c55e; border-radius:12px; color:#22c55e;">
+          <div style="font-size:2rem; margin-bottom:8px;">✓</div>
+          <div style="font-size:1.2rem; font-weight:700; margin-bottom:6px;">Message Sent!</div>
+          <div style="color:#94a3b8;">I'll get back to you within 12-24 hours.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <a href="index.html" class="logo">ClickReady<span>Sites</span></a>
+  <p>Built for business. Ready to click.</p>
+  <p style="margin-top:8px">© 2026 ClickReady Sites</p>
+</footer>
+
+<script>
+  document.getElementById('contact-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submit-btn');
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+    const data = new FormData(this);
+    try {
+      const res = await fetch('https://formspree.io/f/xjgjwwjr', { method: 'POST', body: data, headers: { 'Accept': 'application/json' } });
+      if (res.ok) {
+        this.style.display = 'none';
+        document.getElementById('form-success').style.display = 'block';
+      } else {
+        btn.textContent = 'Send Message →';
+        btn.disabled = false;
+        alert('Something went wrong. Please try again.');
+      }
+    } catch {
+      btn.textContent = 'Send Message →';
+      btn.disabled = false;
+      alert('Something went wrong. Please try again.');
+    }
+  });
+</script>
+
+</body>
+</html>
