@@ -454,6 +454,7 @@
     document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
     document.getElementById('page-' + id).classList.add('active');
     if (btn) btn.classList.add('active');
+    if (id === 'history') renderHistory();
   }
 
   // ── HELPERS ──────────────────────────────────────────────
@@ -827,13 +828,6 @@
           </div>
         </div>`;
     }).join('');
-  }
-
-  // update showPage to refresh history when navigating to it
-  const _origShowPage = showPage;
-  function showPage(id, btn) {
-    _origShowPage(id, btn);
-    if (id === 'history') renderHistory();
   }
 
   loadDashboard();
