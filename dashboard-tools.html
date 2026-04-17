@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Business Dashboard — Your Numbers at a Glance</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --green:   #22c55e;
+      --green-dk:#16a34a;
+      --bg:      #0a0a0a;
+      --bg2:     #111111;
+      --text:    #f1f5f9;
+      --muted:   #94a3b8;
+      --border:  #1e1e1e;
+      --radius:  12px;
+    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: var(--text); background: var(--bg); line-height: 1.6; min-height: 100vh; }
+
+    header { background: rgba(10,10,10,0.95); border-bottom: 1px solid var(--border); padding: 18px 24px; display: flex; align-items: center; justify-content: space-between; }
+    .logo { font-size: 1.2rem; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
+    .logo span { color: var(--green); }
+    .badge { background: rgba(34,197,94,0.15); color: var(--green); font-size: 0.75rem; font-weight: 600; padding: 4px 12px; border-radius: 99px; }
+
+    main { max-width: 900px; margin: 0 auto; padding: 48px 24px 80px; }
+
+    h1 { font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 900; letter-spacing: -0.5px; margin-bottom: 8px; }
+    .subtitle { color: var(--muted); font-size: 1rem; margin-bottom: 40px; }
+
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+    @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
+
+    .card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; }
+    .card h2 { font-size: 0.75rem; font-weight: 700; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 20px; }
+
+    .field { margin-bottom: 18px; }
+    .field label { display: block; font-size: 0.875rem; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+    .field .hint { font-size: 0.75rem; color: var(--muted); margin-bottom: 6px; }
+    .field input { width: 100%; background: #0a0a0a; border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; color: var(--text); font-size: 1rem; font-family: inherit; transition: border-color 0.2s; }
+    .field input:focus { outline: none; border-color: var(--green); }
+    .field input::placeholder { color: #3a3a3a; }
+
+    .results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+    @media (max-width: 640px) { .results-grid { grid-template-columns: 1fr; } }
+
+    .result-card { background: #0a0a0a; border: 1px solid var(--border); border-radius: 10px; padding: 18px; }
+    .result-card .label { font-size: 0.75rem; font-weight: 600; color: var(--muted); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px; }
+    .result-card .value { font-size: 1.6rem; font-weight: 800; color: var(--text); letter-spacing: -0.5px; }
+    .result-card .sub { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
+
+    .result-card.featured { border-color: var(--green); background: rgba(34,197,94,0.06); }
+    .result-card.featured .value { color: var(--green); }
+
+    .grade-section { background: #0a0a0a; border: 1px solid var(--border); border-radius: 10px; padding: 20px 24px; display: flex; align-items: center; gap: 20px; }
+    .grade-circle { width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 900; flex-shrink: 0; }
+    .grade-info .grade-label { font-size: 0.75rem; font-weight: 600; color: var(--muted); letter-spacing: 0.5px; text-transform: uppercase; }
+    .grade-info .grade-desc { font-size: 0.95rem; font-weight: 600; color: var(--text); margin-top: 2px; }
+    .grade-info .grade-tip { font-size: 0.8rem; color: var(--muted); margin-top: 4px; }
+
+    .empty-state { color: var(--muted); font-size: 0.95rem; text-align: center; padding: 32px 16px; }
+
+    .btn-row { display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
+    .btn { display: inline-block; padding: 11px 24px; border-radius: 8px; font-size: 0.9rem; font-weight: 700; cursor: pointer; border: none; font-family: inherit; transition: transform 0.15s, box-shadow 0.15s; }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary { background: var(--green); color: #0a0a0a; box-shadow: 0 0 14px rgba(34,197,94,0.3); }
+    .btn-primary:hover { background: var(--green-dk); }
+    .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+    .btn-ghost:hover { color: var(--text); border-color: #3a3a3a; }
+
+    .saved-notice { font-size: 0.75rem; color: var(--green); opacity: 0; transition: opacity 0.3s; margin-left: 8px; }
+    .saved-notice.show { opacity: 1; }
+
+    footer { text-align: center; color: var(--muted); font-size: 0.8rem; padding: 24px; border-top: 1px solid var(--border); }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">ClickReady<span>Sites</span></div>
+  <div class="badge">✦ Business Dashboard</div>
+</header>
+
+<main>
+  <h1>Your Business Dashboard</h1>
+  <p class="subtitle">Enter your numbers below — your results update instantly.</p>
+
+  <div class="grid">
+
+    <div class="card">
+      <h2>Your Numbers</h2>
+
+      <div class="field">
+        <label>Monthly Fixed Costs</label>
+        <div class="hint">Rent, subscriptions, salaries, insurance — costs you pay no matter what</div>
+        <input type="number" id="fixedCosts" placeholder="e.g. 2000" min="0">
+      </div>
+
+      <div class="field">
+        <label>Variable Cost Per Sale</label>
+        <div class="hint">Materials, shipping, fees — what each sale actually costs you</div>
+        <input type="number" id="varCost" placeholder="e.g. 8" min="0">
+      </div>
+
+      <div class="field">
+        <label>Your Selling Price</label>
+        <div class="hint">What you charge per product or service</div>
+        <input type="number" id="price" placeholder="e.g. 25" min="0">
+      </div>
+
+      <div class="field">
+        <label>Monthly Sales Volume</label>
+        <div class="hint">How many units or clients you get per month right now</div>
+        <input type="number" id="sales" placeholder="e.g. 100" min="0">
+      </div>
+
+      <div class="field">
+        <label>Monthly Income Goal</label>
+        <div class="hint">What you want to take home after all costs</div>
+        <input type="number" id="goal" placeholder="e.g. 3000" min="0">
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-ghost" onclick="resetAll()">Reset</button>
+        <span class="saved-notice" id="savedNotice">Saved ✓</span>
+      </div>
+    </div>
+
+    <div>
+      <div class="card" style="margin-bottom: 24px;">
+        <h2>Your Results</h2>
+        <div id="resultsArea">
+          <div class="empty-state">Fill in your numbers on the left to see your results.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Business Health</h2>
+        <div id="gradeArea">
+          <div class="empty-state">Enter your numbers to get your grade.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer>© 2026 ClickReady Sites — Business Dashboard</footer>
+
+<script>
+  const fields = ['fixedCosts', 'varCost', 'price', 'sales', 'goal'];
+
+  function loadSaved() {
+    fields.forEach(id => {
+      const val = localStorage.getItem('bd_' + id);
+      if (val) document.getElementById(id).value = val;
+    });
+    calculate();
+  }
+
+  function saveAndCalculate() {
+    fields.forEach(id => {
+      localStorage.setItem('bd_' + id, document.getElementById(id).value);
+    });
+    const notice = document.getElementById('savedNotice');
+    notice.classList.add('show');
+    setTimeout(() => notice.classList.remove('show'), 1500);
+    calculate();
+  }
+
+  function resetAll() {
+    fields.forEach(id => {
+      document.getElementById(id).value = '';
+      localStorage.removeItem('bd_' + id);
+    });
+    document.getElementById('resultsArea').innerHTML = '<div class="empty-state">Fill in your numbers on the left to see your results.</div>';
+    document.getElementById('gradeArea').innerHTML = '<div class="empty-state">Enter your numbers to get your grade.</div>';
+  }
+
+  function fmt(n) {
+    return '$' + Math.round(n).toLocaleString();
+  }
+
+  function calculate() {
+    const fixed  = parseFloat(document.getElementById('fixedCosts').value) || 0;
+    const varC   = parseFloat(document.getElementById('varCost').value)    || 0;
+    const price  = parseFloat(document.getElementById('price').value)      || 0;
+    const sales  = parseFloat(document.getElementById('sales').value)      || 0;
+    const goal   = parseFloat(document.getElementById('goal').value)       || 0;
+
+    const hasEnough = price > 0 && (fixed > 0 || varC > 0 || sales > 0);
+    if (!hasEnough) return;
+
+    const contribution = price - varC;
+
+    const breakEven = contribution > 0 ? Math.ceil(fixed / contribution) : null;
+    const monthlyRevenue = price * sales;
+    const monthlyVarCosts = varC * sales;
+    const monthlyProfit = monthlyRevenue - monthlyVarCosts - fixed;
+    const marginPct = price > 0 ? ((contribution / price) * 100) : 0;
+    const salesForGoal = contribution > 0 ? Math.ceil((fixed + goal) / contribution) : null;
+
+    let resultsHTML = '<div class="results-grid">';
+
+    resultsHTML += `
+      <div class="result-card${monthlyProfit >= 0 ? ' featured' : ''}">
+        <div class="label">Monthly Profit / Loss</div>
+        <div class="value">${fmt(monthlyProfit)}</div>
+        <div class="sub">${monthlyProfit >= 0 ? 'You\'re profitable' : 'Currently losing money'}</div>
+      </div>`;
+
+    resultsHTML += `
+      <div class="result-card">
+        <div class="label">Break-Even Sales</div>
+        <div class="value">${breakEven !== null ? breakEven.toLocaleString() : '—'}</div>
+        <div class="sub">units/sales needed to cover costs</div>
+      </div>`;
+
+    resultsHTML += `
+      <div class="result-card">
+        <div class="label">Profit Margin</div>
+        <div class="value">${marginPct.toFixed(1)}%</div>
+        <div class="sub">profit on every sale</div>
+      </div>`;
+
+    resultsHTML += `
+      <div class="result-card">
+        <div class="label">Monthly Revenue</div>
+        <div class="value">${fmt(monthlyRevenue)}</div>
+        <div class="sub">at current sales volume</div>
+      </div>`;
+
+    if (goal > 0 && salesForGoal !== null) {
+      resultsHTML += `
+        <div class="result-card featured" style="grid-column: 1 / -1;">
+          <div class="label">Sales Needed to Hit Your Goal</div>
+          <div class="value">${salesForGoal.toLocaleString()} sales/month</div>
+          <div class="sub">to take home ${fmt(goal)} after all costs — you currently make ${sales} sales (${salesForGoal - sales > 0 ? (salesForGoal - sales) + ' more needed' : 'goal already reached!'})</div>
+        </div>`;
+    }
+
+    resultsHTML += '</div>';
+    document.getElementById('resultsArea').innerHTML = resultsHTML;
+
+    const grade = getGrade(marginPct, breakEven, sales, monthlyProfit);
+    document.getElementById('gradeArea').innerHTML = `
+      <div class="grade-section">
+        <div class="grade-circle" style="background:${grade.bg}; color:${grade.color};">${grade.letter}</div>
+        <div class="grade-info">
+          <div class="grade-label">Business Health Grade</div>
+          <div class="grade-desc">${grade.title}</div>
+          <div class="grade-tip">${grade.tip}</div>
+        </div>
+      </div>`;
+  }
+
+  function getGrade(margin, breakEven, sales, profit) {
+    if (margin >= 50 && profit > 0 && sales >= breakEven) {
+      return { letter: 'A', title: 'Excellent', bg: 'rgba(34,197,94,0.15)', color: '#22c55e', tip: 'Strong margins and profitable. Keep scaling.' };
+    } else if (margin >= 30 && profit > 0) {
+      return { letter: 'B', title: 'Healthy', bg: 'rgba(34,197,94,0.1)', color: '#4ade80', tip: 'Solid foundation. Look for ways to increase margin.' };
+    } else if (margin >= 15 && profit >= 0) {
+      return { letter: 'C', title: 'Okay', bg: 'rgba(234,179,8,0.1)', color: '#eab308', tip: 'You\'re covering costs but margins are thin. Raise prices or cut variable costs.' };
+    } else if (profit < 0) {
+      return { letter: 'D', title: 'At Risk', bg: 'rgba(239,68,68,0.1)', color: '#ef4444', tip: 'Losing money each month. Increase prices or reduce fixed costs urgently.' };
+    } else {
+      return { letter: 'F', title: 'Critical', bg: 'rgba(239,68,68,0.15)', color: '#dc2626', tip: 'Very low margins. This business model needs restructuring.' };
+    }
+  }
+
+  fields.forEach(id => {
+    document.getElementById(id).addEventListener('input', saveAndCalculate);
+  });
+
+  loadSaved();
+</script>
+
+</body>
+</html>
