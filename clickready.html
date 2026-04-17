@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClickReady Sites — Websites for Small Business</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue:    #22c55e;
+      --blue-dk: #16a34a;
+      --amber:   #22c55e;
+      --amber-dk:#16a34a;
+      --bg:      #0a0a0a;
+      --bg2:     #111111;
+      --text:    #f1f5f9;
+      --muted:   #94a3b8;
+      --border:  #1e1e1e;
+      --radius:  12px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.6;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10,10,10,0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .logo {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.5px;
+    }
+
+    .logo span { color: var(--blue); }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 32px;
+    }
+
+    nav ul a {
+      text-decoration: none;
+      color: var(--muted);
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+
+    nav ul a:hover { color: var(--blue); }
+
+    .nav-cta {
+      background: var(--blue);
+      color: #fff !important;
+      padding: 8px 20px;
+      border-radius: 8px;
+      transition: background 0.2s !important;
+    }
+
+    .nav-cta:hover { background: var(--blue-dk) !important; color: #fff !important; }
+
+    /* ── HERO ── */
+    #hero {
+      background: linear-gradient(135deg, #0a0a0a 0%, #0d1f0d 100%);
+      padding: 100px 24px 80px;
+      text-align: center;
+    }
+
+    .badge {
+      display: inline-block;
+      background: rgba(34,197,94,0.15);
+      color: var(--blue);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 4px 14px;
+      border-radius: 99px;
+      margin-bottom: 20px;
+      letter-spacing: 0.5px;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 900;
+      line-height: 1.15;
+      max-width: 680px;
+      margin: 0 auto 20px;
+      letter-spacing: -1px;
+    }
+
+    h1 em {
+      font-style: normal;
+      color: var(--blue);
+    }
+
+    .hero-sub {
+      font-size: 1.15rem;
+      color: var(--muted);
+      max-width: 520px;
+      margin: 0 auto 36px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 14px 32px;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: transform 0.15s, box-shadow 0.15s;
+      cursor: pointer;
+    }
+
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+
+    .btn-primary {
+      background: var(--blue);
+      color: #0a0a0a;
+      box-shadow: 0 0 16px rgba(34,197,94,0.35);
+    }
+
+    .btn-primary:hover { background: var(--blue-dk); box-shadow: 0 0 24px rgba(34,197,94,0.5); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--blue);
+      border: 2px solid var(--blue);
+      margin-left: 12px;
+    }
+
+    .hero-trust {
+      margin-top: 48px;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .hero-trust strong { color: var(--text); }
+
+    /* ── SECTION COMMON ── */
+    section { padding: 80px 24px; }
+
+    .section-label {
+      text-align: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      color: var(--blue);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    h2 {
+      text-align: center;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 12px;
+    }
+
+    .section-sub {
+      text-align: center;
+      color: var(--muted);
+      max-width: 500px;
+      margin: 0 auto 48px;
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; }
+
+    /* ── SERVICES ── */
+    #services { background: var(--bg2); }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      position: relative;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+
+    .card:hover { box-shadow: 0 12px 32px rgba(0,0,0,0.08); transform: translateY(-4px); }
+
+    .card.featured {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+    }
+
+    .popular-tag {
+      position: absolute;
+      top: -13px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--blue);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 14px;
+      border-radius: 99px;
+      white-space: nowrap;
+    }
+
+    .card-name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .card-price {
+      font-size: 2.4rem;
+      font-weight: 900;
+      letter-spacing: -1px;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    .card-price span {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    .card ul {
+      list-style: none;
+      margin-bottom: 28px;
+    }
+
+    .card ul li {
+      padding: 7px 0;
+      font-size: 0.95rem;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card ul li::before {
+      content: '✓';
+      color: #22c55e;
+      font-weight: 700;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+
+    .card .btn { width: 100%; text-align: center; }
+
+    /* ── PORTFOLIO ── */
+    #portfolio { background: var(--bg); }
+
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 28px;
+    }
+
+    .portfolio-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+
+    .portfolio-card:hover { box-shadow: 0 12px 32px rgba(0,0,0,0.08); transform: translateY(-4px); }
+
+    .portfolio-img {
+      height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+    }
+
+    .portfolio-img.grad1 { background: linear-gradient(135deg, #667eea, #764ba2); }
+    .portfolio-img.grad2 { background: linear-gradient(135deg, #11998e, #38ef7d); }
+    .portfolio-img.grad3 { background: linear-gradient(135deg, #f093fb, #f5576c); }
+
+    .portfolio-info {
+      padding: 20px 24px;
+    }
+
+    .portfolio-tag {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
+    .portfolio-info h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .portfolio-info p {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    /* ── CONTACT ── */
+    #contact { background: var(--bg2); }
+
+    .contact-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .contact-info h3 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .contact-info p {
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+
+    .contact-perks { list-style: none; }
+
+    .contact-perks li {
+      padding: 8px 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+      display: flex;
+      gap: 10px;
+    }
+
+    .contact-perks li::before {
+      content: '→';
+      color: var(--blue);
+      font-weight: 700;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    input, textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      color: var(--text);
+      background: #111;
+      transition: border-color 0.2s;
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+    }
+
+    textarea { resize: vertical; min-height: 120px; }
+
+    form .btn { border: none; font-family: inherit; font-size: 1rem; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #050505;
+      color: #94a3b8;
+      text-align: center;
+      padding: 36px 24px;
+    }
+
+    footer .logo { color: #fff; display: block; margin-bottom: 8px; }
+    footer .logo span { color: var(--blue); }
+    footer p { font-size: 0.875rem; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      nav ul { display: none; }
+      .form-row { grid-template-columns: 1fr; }
+      .contact-wrap { grid-template-columns: 1fr; gap: 32px; }
+      .btn-outline { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">ClickReady<span>Sites</span></div>
+  <ul>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#portfolio">Portfolio</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#contact" class="nav-cta">Get a Quote</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="badge">✦ Websites for Small Business</div>
+  <h1>Your Business Deserves a Website That <em>Works</em></h1>
+  <p class="hero-sub">I build clean, fast, professional websites for small businesses — ready to launch in days, not months.</p>
+  <a href="#contact" class="btn btn-primary">Get a Free Quote</a>
+  <a href="#services" class="btn btn-outline">See Pricing</a>
+  <div class="hero-trust">
+    <strong>No hidden fees.</strong> &nbsp;·&nbsp; <strong>Fast turnaround.</strong> &nbsp;·&nbsp; <strong>You own everything.</strong>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="container">
+    <div class="section-label">Pricing</div>
+    <h2>Simple, Honest Packages</h2>
+    <p class="section-sub">Pick the plan that fits your business. Every site is mobile-friendly and built to impress.</p>
+    <div class="cards">
+
+      <div class="card">
+        <div class="card-name">Starter</div>
+        <div class="card-price">$99 <span>one-time</span></div>
+        <ul>
+          <li>1-page website</li>
+          <li>Mobile-friendly design</li>
+          <li>Contact form</li>
+          <li>Basic SEO setup</li>
+          <li>Delivered in 3 days</li>
+        </ul>
+        <a href="#contact" class="btn btn-outline">Get Started</a>
+      </div>
+
+      <div class="card featured">
+        <div class="popular-tag">Most Popular</div>
+        <div class="card-name">Business</div>
+        <div class="card-price">$399 <span>one-time</span></div>
+        <ul>
+          <li>Up to 5 pages</li>
+          <li>Mobile-friendly design</li>
+          <li>Contact form + Google Maps</li>
+          <li>SEO optimization</li>
+          <li>Delivered in 5 days</li>
+        </ul>
+        <a href="#contact" class="btn btn-primary">Get Started</a>
+      </div>
+
+      <div class="card">
+        <div class="card-name">Premium</div>
+        <div class="card-price">$799 <span>one-time</span></div>
+        <ul>
+          <li>Fully custom design</li>
+          <li>Blog or product pages</li>
+          <li>Google Analytics setup</li>
+          <li>Priority support</li>
+          <li>Delivered in 7 days</li>
+        </ul>
+        <a href="#contact" class="btn btn-outline">Get Started</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio">
+  <div class="container">
+    <div class="section-label">Portfolio</div>
+    <h2>Recent Work</h2>
+    <p class="section-sub">A sample of websites built for local businesses.</p>
+    <div class="portfolio-grid">
+
+      <div class="portfolio-card">
+        <div class="portfolio-img grad1">🍕</div>
+        <div class="portfolio-info">
+          <div class="portfolio-tag">Restaurant</div>
+          <h3>Tony's Pizzeria</h3>
+          <p>A warm, appetizing site with an online menu, hours, and a reservation form. Boosted foot traffic within the first week.</p>
+        </div>
+      </div>
+
+      <div class="portfolio-card">
+        <div class="portfolio-img grad2">🔧</div>
+        <div class="portfolio-info">
+          <div class="portfolio-tag">Home Services</div>
+          <h3>Verde Landscaping</h3>
+          <p>Clean service pages, before/after gallery, and a quote request form. Client saw a 3x increase in online leads.</p>
+        </div>
+      </div>
+
+      <div class="portfolio-card">
+        <div class="portfolio-img grad3">💆</div>
+        <div class="portfolio-info">
+          <div class="portfolio-tag">Wellness</div>
+          <h3>Calm & Co. Spa</h3>
+          <p>Elegant, calming design with a booking link and service menu. Helped the owner look as professional as the experience.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="section-label">Contact</div>
+    <h2>Let's Build Your Site</h2>
+    <p class="section-sub">Fill out the form and I'll get back to you within 24 hours — no pressure, no commitment.</p>
+    <div class="contact-wrap">
+
+      <div class="contact-info">
+        <h3>What happens next?</h3>
+        <p>Send a message and I'll reach out to learn about your business and what you need.</p>
+        <ul class="contact-perks">
+          <li>Free consultation call</li>
+          <li>Custom quote — no surprises</li>
+          <li>You approve everything before launch</li>
+          <li>You keep 100% ownership of your site</li>
+        </ul>
+      </div>
+
+      <form action="https://formspree.io/f/xjgjwwjr" method="POST">
+        <div class="form-row">
+          <input type="text" name="name" placeholder="Your Name" required>
+          <input type="text" name="business" placeholder="Business Name">
+        </div>
+        <input type="email" name="email" placeholder="Your Email" required>
+        <textarea name="message" placeholder="Tell me about your business and what you need..."></textarea>
+        <button type="submit" class="btn btn-primary">Send Message →</button>
+      </form>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="logo">ClickReady<span>Sites</span></div>
+  <p>Built for business. Ready to click.</p>
+  <p style="margin-top:8px">© 2026 ClickReady Sites</p>
+</footer>
+
+</body>
+</html>
