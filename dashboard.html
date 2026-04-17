@@ -3,126 +3,120 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Business Dashboard — Know Your Numbers. Run a Better Business.</title>
+  <title>Profit Pulse — Know Your Numbers. Run a Better Business.</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --green:   #22c55e;
-      --green-dk:#16a34a;
-      --bg:      #0a0a0a;
-      --bg2:     #111111;
-      --text:    #f1f5f9;
-      --muted:   #94a3b8;
-      --border:  #1e1e1e;
-      --radius:  12px;
+      --green:    #16a34a;
+      --green-lt: #22c55e;
+      --green-bg: #f0fdf4;
+      --green-bd: #bbf7d0;
+      --bg:       #ffffff;
+      --bg2:      #f9fafb;
+      --text:     #111827;
+      --muted:    #6b7280;
+      --border:   #e5e7eb;
+      --radius:   12px;
     }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: var(--text); background: var(--bg); line-height: 1.6; }
-    nav { position: sticky; top: 0; z-index: 100; background: rgba(10,10,10,0.95); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 64px; }
-    .logo { font-size: 1.25rem; font-weight: 800; color: #fff; letter-spacing: -0.5px; text-decoration: none; }
+
+    nav { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.97); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); padding: 0 28px; display: flex; align-items: center; justify-content: space-between; height: 64px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+    .logo { font-size: 1.25rem; font-weight: 800; color: var(--text); letter-spacing: -0.5px; text-decoration: none; }
     .logo span { color: var(--green); }
-    nav ul { list-style: none; display: flex; gap: 32px; }
-    nav ul a { text-decoration: none; color: var(--muted); font-weight: 500; font-size: 0.95rem; transition: color 0.2s; }
-    nav ul a:hover { color: var(--green); }
-    .nav-cta { background: var(--green) !important; color: #0a0a0a !important; padding: 8px 20px; border-radius: 8px; }
-    .nav-cta:hover { background: var(--green-dk) !important; }
-    .btn { display: inline-block; padding: 14px 32px; border-radius: 10px; font-size: 1rem; font-weight: 700; text-decoration: none; transition: transform 0.15s, box-shadow 0.15s; cursor: pointer; border: none; font-family: inherit; }
+    .nav-buy { background: var(--green); color: #fff; padding: 9px 22px; border-radius: 8px; font-weight: 700; font-size: 0.9rem; text-decoration: none; transition: background 0.15s; }
+    .nav-buy:hover { background: #15803d; }
+
+    .btn { display: inline-block; padding: 15px 36px; border-radius: 10px; font-size: 1rem; font-weight: 700; text-decoration: none; transition: all 0.15s; cursor: pointer; border: none; font-family: inherit; }
     .btn:hover { transform: translateY(-2px); }
-    .btn-primary { background: var(--green); color: #0a0a0a; box-shadow: 0 0 16px rgba(34,197,94,0.35); }
-    .btn-primary:hover { background: var(--green-dk); box-shadow: 0 0 24px rgba(34,197,94,0.5); }
-    .btn-lg { padding: 18px 44px; font-size: 1.1rem; }
-    footer { background: #050505; color: #94a3b8; text-align: center; padding: 36px 24px; }
-    footer .logo { display: block; margin-bottom: 8px; }
+    .btn-primary { background: var(--green); color: #fff; box-shadow: 0 4px 14px rgba(22,163,74,0.3); }
+    .btn-primary:hover { background: #15803d; box-shadow: 0 6px 20px rgba(22,163,74,0.4); }
+
+    footer { background: var(--bg2); border-top: 1px solid var(--border); color: var(--muted); text-align: center; padding: 36px 24px; }
+    footer .logo { display: block; margin-bottom: 8px; font-size: 1.1rem; }
     footer p { font-size: 0.875rem; }
-    @media (max-width: 640px) { nav ul { display: none; } }
   </style>
 </head>
 <body>
 
 <nav>
-  <a href="index.html" class="logo">ClickReady<span>Sites</span></a>
-  <ul>
-    <li><a href="about.html">About Me</a></li>
-    <li><a href="services.html">Services</a></li>
-    <li><a href="portfolio.html">Portfolio</a></li>
-    <li><a href="contact.html">Contact</a></li>
-    <li><a href="#buy" class="nav-cta">Get Access — $19</a></li>
-  </ul>
+  <a href="dashboard.html" class="logo">Profit<span>Pulse</span></a>
+  <a href="#buy" class="nav-buy">Get Access — $19</a>
 </nav>
 
 <!-- Hero -->
-<section style="background: linear-gradient(135deg, #0a0a0a 0%, #0d1f0d 100%); padding: 100px 24px 80px; text-align: center;">
-  <div style="display:inline-block; background:rgba(34,197,94,0.15); color:var(--green); font-size:0.8rem; font-weight:600; padding:4px 14px; border-radius:99px; margin-bottom:20px; letter-spacing:0.5px;">✦ One-Time Purchase · No Subscription</div>
-  <h1 style="font-size: clamp(2rem,5vw,3.2rem); font-weight:900; line-height:1.15; max-width:720px; margin:0 auto 20px; letter-spacing:-1px;">Know Your Numbers.<br><em style="font-style:normal; color:var(--green);">Run a Better Business.</em></h1>
-  <p style="font-size:1.15rem; color:var(--muted); max-width:540px; margin:0 auto 36px;">The Business Dashboard tells you your break-even point, profit margin, monthly profit, and exactly how many sales you need to hit your income goal — in seconds.</p>
-  <a href="#buy" class="btn btn-primary btn-lg">Get Access for $19</a>
-  <div style="margin-top:24px; color:var(--muted); font-size:0.85rem;">One-time payment &nbsp;·&nbsp; Instant access &nbsp;·&nbsp; No login needed</div>
+<section style="background: linear-gradient(160deg, #fff 0%, var(--green-bg) 100%); padding: 96px 24px 80px; text-align: center; border-bottom: 1px solid var(--green-bd);">
+  <div style="display:inline-block; background:var(--green-bg); color:var(--green); font-size:0.78rem; font-weight:700; padding:5px 16px; border-radius:99px; border:1px solid var(--green-bd); margin-bottom:24px; letter-spacing:0.5px;">✦ One-Time Purchase · No Subscription Ever</div>
+  <h1 style="font-size:clamp(2.2rem,5vw,3.4rem); font-weight:900; line-height:1.1; max-width:740px; margin:0 auto 20px; letter-spacing:-1.5px; color:var(--text);">Know Your Numbers.<br><span style="color:var(--green);">Run a Better Business.</span></h1>
+  <p style="font-size:1.1rem; color:var(--muted); max-width:520px; margin:0 auto 40px;">Profit Pulse gives you every calculator and tool you need to understand your business — break-even, margins, pricing, profit, and more. In seconds.</p>
+  <a href="#buy" class="btn btn-primary" style="font-size:1.1rem; padding:17px 44px;">Get Instant Access — $19</a>
+  <div style="margin-top:20px; color:var(--muted); font-size:0.85rem;">One-time payment &nbsp;·&nbsp; Instant access &nbsp;·&nbsp; No account needed</div>
 </section>
 
-<!-- What It Does -->
-<section style="padding: 80px 24px; max-width: 1000px; margin: 0 auto;">
-  <div style="text-align:center; margin-bottom:48px;">
-    <div style="font-size:0.8rem; font-weight:700; color:var(--green); letter-spacing:1px; text-transform:uppercase; margin-bottom:12px;">What You Get</div>
-    <h2 style="font-size:clamp(1.6rem,3vw,2.2rem); font-weight:900; letter-spacing:-0.5px;">Your entire business picture<br>in one place</h2>
+<!-- Tools List -->
+<section style="padding:80px 24px; max-width:1040px; margin:0 auto;">
+  <div style="text-align:center; margin-bottom:52px;">
+    <div style="font-size:0.75rem; font-weight:700; color:var(--green); letter-spacing:1.5px; text-transform:uppercase; margin-bottom:12px;">Everything Included</div>
+    <h2 style="font-size:clamp(1.6rem,3vw,2.2rem); font-weight:900; letter-spacing:-0.5px;">5 powerful tools.<br>One simple dashboard.</h2>
   </div>
-  <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap:24px;">
-    <div style="background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:28px;">
-      <div style="font-size:1.8rem; margin-bottom:12px;">📊</div>
+  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:24px;">
+    <div style="background:#fff; border:1px solid var(--border); border-radius:var(--radius); padding:28px; box-shadow:0 1px 4px rgba(0,0,0,0.04);">
+      <div style="font-size:2rem; margin-bottom:14px;">📊</div>
+      <h3 style="font-weight:700; margin-bottom:8px;">Full Business Dashboard</h3>
+      <p style="color:var(--muted); font-size:0.9rem;">Enter your numbers once. See your profit, break-even, margin, and income goal tracker all at the same time.</p>
+    </div>
+    <div style="background:#fff; border:1px solid var(--border); border-radius:var(--radius); padding:28px; box-shadow:0 1px 4px rgba(0,0,0,0.04);">
+      <div style="font-size:2rem; margin-bottom:14px;">💰</div>
+      <h3 style="font-weight:700; margin-bottom:8px;">Pricing Calculator</h3>
+      <p style="color:var(--muted); font-size:0.9rem;">Enter your cost and target margin — instantly see the exact price you should charge to hit your profit goal.</p>
+    </div>
+    <div style="background:#fff; border:1px solid var(--border); border-radius:var(--radius); padding:28px; box-shadow:0 1px 4px rgba(0,0,0,0.04);">
+      <div style="font-size:2rem; margin-bottom:14px;">📉</div>
       <h3 style="font-weight:700; margin-bottom:8px;">Break-Even Calculator</h3>
-      <p style="color:var(--muted); font-size:0.95rem;">Know exactly how many sales you need before you make a single dollar of profit. Stop guessing.</p>
+      <p style="color:var(--muted); font-size:0.9rem;">Know the exact minimum number of sales you need each month before you make a single dollar of profit.</p>
     </div>
-    <div style="background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:28px;">
-      <div style="font-size:1.8rem; margin-bottom:12px;">💰</div>
-      <h3 style="font-weight:700; margin-bottom:8px;">Monthly Profit & Loss</h3>
-      <p style="color:var(--muted); font-size:0.95rem;">See your real monthly profit after all costs — fixed and variable. Know if you're actually making money.</p>
+    <div style="background:#fff; border:1px solid var(--border); border-radius:var(--radius); padding:28px; box-shadow:0 1px 4px rgba(0,0,0,0.04);">
+      <div style="font-size:2rem; margin-bottom:14px;">📈</div>
+      <h3 style="font-weight:700; margin-bottom:8px;">Profit Margin Calculator</h3>
+      <p style="color:var(--muted); font-size:0.9rem;">See your profit margin and markup on any product or service — know instantly if your pricing makes sense.</p>
     </div>
-    <div style="background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:28px;">
-      <div style="font-size:1.8rem; margin-bottom:12px;">📈</div>
-      <h3 style="font-weight:700; margin-bottom:8px;">Profit Margin</h3>
-      <p style="color:var(--muted); font-size:0.95rem;">Find out what percentage of every sale is actual profit — so you know if your pricing makes sense.</p>
-    </div>
-    <div style="background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:28px;">
-      <div style="font-size:1.8rem; margin-bottom:12px;">🎯</div>
+    <div style="background:#fff; border:1px solid var(--border); border-radius:var(--radius); padding:28px; box-shadow:0 1px 4px rgba(0,0,0,0.04);">
+      <div style="font-size:2rem; margin-bottom:14px;">🎯</div>
       <h3 style="font-weight:700; margin-bottom:8px;">Income Goal Tracker</h3>
-      <p style="color:var(--muted); font-size:0.95rem;">Enter your income goal and instantly see exactly how many sales per month you need to get there.</p>
+      <p style="color:var(--muted); font-size:0.9rem;">Set your income goal and see exactly how many sales per month you need to reach it. No guessing.</p>
     </div>
-    <div style="background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:28px;">
-      <div style="font-size:1.8rem; margin-bottom:12px;">🏆</div>
-      <h3 style="font-weight:700; margin-bottom:8px;">Business Health Grade</h3>
-      <p style="color:var(--muted); font-size:0.95rem;">Get an A–F grade on your business health with a plain-English explanation of what it means and what to fix.</p>
-    </div>
-    <div style="background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:28px;">
-      <div style="font-size:1.8rem; margin-bottom:12px;">💾</div>
-      <h3 style="font-weight:700; margin-bottom:8px;">Numbers Saved Automatically</h3>
-      <p style="color:var(--muted); font-size:0.95rem;">Your numbers save to your browser automatically. Come back anytime — everything is right where you left it.</p>
+    <div style="background:var(--green-bg); border:1px solid var(--green-bd); border-radius:var(--radius); padding:28px;">
+      <div style="font-size:2rem; margin-bottom:14px;">🏆</div>
+      <h3 style="font-weight:700; margin-bottom:8px; color:var(--green);">Business Health Grade</h3>
+      <p style="color:#15803d; font-size:0.9rem;">Get an A–F grade on your business health with a plain-English tip on what to fix or keep doing.</p>
     </div>
   </div>
 </section>
 
-<!-- How Simple It Is -->
+<!-- How It Works -->
 <section style="background:var(--bg2); border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:80px 24px;">
-  <div style="max-width:700px; margin:0 auto; text-align:center;">
-    <div style="font-size:0.8rem; font-weight:700; color:var(--green); letter-spacing:1px; text-transform:uppercase; margin-bottom:12px;">How It Works</div>
-    <h2 style="font-size:clamp(1.6rem,3vw,2.2rem); font-weight:900; letter-spacing:-0.5px; margin-bottom:48px;">Three steps. Two minutes.</h2>
-    <div style="display:flex; flex-direction:column; gap:24px; text-align:left;">
+  <div style="max-width:660px; margin:0 auto; text-align:center;">
+    <div style="font-size:0.75rem; font-weight:700; color:var(--green); letter-spacing:1.5px; text-transform:uppercase; margin-bottom:12px;">How It Works</div>
+    <h2 style="font-size:clamp(1.6rem,3vw,2.2rem); font-weight:900; letter-spacing:-0.5px; margin-bottom:48px;">Up and running in 2 minutes.</h2>
+    <div style="display:flex; flex-direction:column; gap:28px; text-align:left;">
       <div style="display:flex; gap:20px; align-items:flex-start;">
-        <div style="background:var(--green); color:#0a0a0a; font-weight:900; font-size:0.9rem; width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px;">1</div>
+        <div style="background:var(--green); color:#fff; font-weight:900; width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.85rem; flex-shrink:0; margin-top:3px;">1</div>
         <div>
-          <div style="font-weight:700; margin-bottom:4px;">Buy once for $19</div>
-          <div style="color:var(--muted); font-size:0.95rem;">Instant checkout. You'll get a link to your dashboard by email immediately after.</div>
+          <div style="font-weight:700; margin-bottom:3px;">Buy once for $19</div>
+          <div style="color:var(--muted); font-size:0.9rem;">Quick checkout. You'll receive a link to your private dashboard immediately by email.</div>
         </div>
       </div>
       <div style="display:flex; gap:20px; align-items:flex-start;">
-        <div style="background:var(--green); color:#0a0a0a; font-weight:900; font-size:0.9rem; width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px;">2</div>
+        <div style="background:var(--green); color:#fff; font-weight:900; width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.85rem; flex-shrink:0; margin-top:3px;">2</div>
         <div>
-          <div style="font-weight:700; margin-bottom:4px;">Open your dashboard</div>
-          <div style="color:var(--muted); font-size:0.95rem;">Click the link. No account, no app, no setup. Just your dashboard — ready to use.</div>
+          <div style="font-weight:700; margin-bottom:3px;">Open your dashboard</div>
+          <div style="color:var(--muted); font-size:0.9rem;">Click the link. No account, no app, no setup — just your tools, ready to use.</div>
         </div>
       </div>
       <div style="display:flex; gap:20px; align-items:flex-start;">
-        <div style="background:var(--green); color:#0a0a0a; font-weight:900; font-size:0.9rem; width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px;">3</div>
+        <div style="background:var(--green); color:#fff; font-weight:900; width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.85rem; flex-shrink:0; margin-top:3px;">3</div>
         <div>
-          <div style="font-weight:700; margin-bottom:4px;">Enter your numbers</div>
-          <div style="color:var(--muted); font-size:0.95rem;">Fill in about 5 fields. Your results appear instantly and update as you type.</div>
+          <div style="font-weight:700; margin-bottom:3px;">Enter your numbers</div>
+          <div style="color:var(--muted); font-size:0.9rem;">Fill in a few fields. All your results appear instantly. Your numbers save automatically — come back anytime.</div>
         </div>
       </div>
     </div>
@@ -130,43 +124,43 @@
 </section>
 
 <!-- Who It's For -->
-<section style="padding:80px 24px; max-width:800px; margin:0 auto; text-align:center;">
-  <div style="font-size:0.8rem; font-weight:700; color:var(--green); letter-spacing:1px; text-transform:uppercase; margin-bottom:12px;">Who It's For</div>
-  <h2 style="font-size:clamp(1.6rem,3vw,2.2rem); font-weight:900; letter-spacing:-0.5px; margin-bottom:40px;">Built for real business owners</h2>
-  <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap:16px;">
-    <div style="background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:20px; font-weight:600;">🛍️ Online sellers</div>
-    <div style="background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:20px; font-weight:600;">🍕 Restaurant owners</div>
-    <div style="background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:20px; font-weight:600;">🔨 Contractors</div>
-    <div style="background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:20px; font-weight:600;">🎨 Freelancers</div>
-    <div style="background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:20px; font-weight:600;">📦 Product sellers</div>
-    <div style="background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:20px; font-weight:600;">💇 Service businesses</div>
+<section style="padding:80px 24px; max-width:860px; margin:0 auto; text-align:center;">
+  <div style="font-size:0.75rem; font-weight:700; color:var(--green); letter-spacing:1.5px; text-transform:uppercase; margin-bottom:12px;">Who It's For</div>
+  <h2 style="font-size:clamp(1.5rem,3vw,2rem); font-weight:900; letter-spacing:-0.5px; margin-bottom:36px;">Made for real business owners who want real answers.</h2>
+  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:12px;">
+    <div style="background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px 16px; font-weight:600; font-size:0.9rem;">🛍️ Online sellers</div>
+    <div style="background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px 16px; font-weight:600; font-size:0.9rem;">🍕 Restaurants</div>
+    <div style="background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px 16px; font-weight:600; font-size:0.9rem;">🔨 Contractors</div>
+    <div style="background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px 16px; font-weight:600; font-size:0.9rem;">🎨 Freelancers</div>
+    <div style="background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px 16px; font-weight:600; font-size:0.9rem;">📦 Product sellers</div>
+    <div style="background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px 16px; font-weight:600; font-size:0.9rem;">💇 Service businesses</div>
   </div>
 </section>
 
 <!-- Pricing / Buy -->
-<section id="buy" style="padding:80px 24px; text-align:center;">
-  <div style="max-width:480px; margin:0 auto; background:var(--bg2); border:1px solid var(--green); border-radius:16px; padding:48px 40px; box-shadow:0 0 40px rgba(34,197,94,0.1);">
-    <div style="font-size:0.8rem; font-weight:700; color:var(--green); letter-spacing:1px; text-transform:uppercase; margin-bottom:16px;">Business Dashboard</div>
-    <div style="font-size:3rem; font-weight:900; letter-spacing:-1px; margin-bottom:4px;">$19</div>
-    <div style="color:var(--muted); font-size:0.9rem; margin-bottom:32px;">One-time. Yours forever.</div>
+<section id="buy" style="background:var(--green-bg); border-top:1px solid var(--green-bd); padding:80px 24px; text-align:center;">
+  <div style="max-width:460px; margin:0 auto; background:#fff; border:2px solid var(--green); border-radius:16px; padding:48px 40px; box-shadow:0 8px 32px rgba(22,163,74,0.12);">
+    <div style="font-size:0.75rem; font-weight:700; color:var(--green); letter-spacing:1.5px; text-transform:uppercase; margin-bottom:16px;">Profit Pulse</div>
+    <div style="font-size:3.2rem; font-weight:900; letter-spacing:-2px; color:var(--text); margin-bottom:4px;">$19</div>
+    <div style="color:var(--muted); font-size:0.9rem; margin-bottom:32px;">One-time payment. Yours forever.</div>
     <div style="text-align:left; margin-bottom:32px; display:flex; flex-direction:column; gap:10px;">
-      <div style="font-size:0.95rem; display:flex; gap:10px;"><span style="color:var(--green); font-weight:700;">✓</span> Break-even calculator</div>
-      <div style="font-size:0.95rem; display:flex; gap:10px;"><span style="color:var(--green); font-weight:700;">✓</span> Monthly profit & loss</div>
-      <div style="font-size:0.95rem; display:flex; gap:10px;"><span style="color:var(--green); font-weight:700;">✓</span> Profit margin calculator</div>
-      <div style="font-size:0.95rem; display:flex; gap:10px;"><span style="color:var(--green); font-weight:700;">✓</span> Income goal tracker</div>
-      <div style="font-size:0.95rem; display:flex; gap:10px;"><span style="color:var(--green); font-weight:700;">✓</span> Business health grade (A–F)</div>
-      <div style="font-size:0.95rem; display:flex; gap:10px;"><span style="color:var(--green); font-weight:700;">✓</span> Numbers auto-saved to your browser</div>
-      <div style="font-size:0.95rem; display:flex; gap:10px;"><span style="color:var(--green); font-weight:700;">✓</span> Works on any device, no app needed</div>
+      <div style="font-size:0.9rem; display:flex; gap:10px; align-items:center;"><span style="color:var(--green); font-weight:800; font-size:1rem;">✓</span> Full business dashboard</div>
+      <div style="font-size:0.9rem; display:flex; gap:10px; align-items:center;"><span style="color:var(--green); font-weight:800; font-size:1rem;">✓</span> Pricing calculator</div>
+      <div style="font-size:0.9rem; display:flex; gap:10px; align-items:center;"><span style="color:var(--green); font-weight:800; font-size:1rem;">✓</span> Break-even calculator</div>
+      <div style="font-size:0.9rem; display:flex; gap:10px; align-items:center;"><span style="color:var(--green); font-weight:800; font-size:1rem;">✓</span> Profit margin calculator</div>
+      <div style="font-size:0.9rem; display:flex; gap:10px; align-items:center;"><span style="color:var(--green); font-weight:800; font-size:1rem;">✓</span> Income goal tracker</div>
+      <div style="font-size:0.9rem; display:flex; gap:10px; align-items:center;"><span style="color:var(--green); font-weight:800; font-size:1rem;">✓</span> Business health grade (A–F)</div>
+      <div style="font-size:0.9rem; display:flex; gap:10px; align-items:center;"><span style="color:var(--green); font-weight:800; font-size:1rem;">✓</span> Numbers auto-saved — return anytime</div>
     </div>
-    <a href="https://gumroad.com" class="btn btn-primary" style="width:100%; display:block; text-align:center; font-size:1.05rem; padding:16px;">Get Instant Access — $19</a>
-    <div style="color:var(--muted); font-size:0.8rem; margin-top:16px;">Secure checkout via Gumroad. Instant delivery.</div>
+    <a href="https://gumroad.com" class="btn btn-primary" style="width:100%; text-align:center; display:block; font-size:1.05rem; padding:16px 24px;">Get Instant Access — $19</a>
+    <div style="color:var(--muted); font-size:0.78rem; margin-top:14px;">Secure checkout via Gumroad. Link delivered instantly by email.</div>
   </div>
 </section>
 
 <footer>
-  <a href="index.html" class="logo">ClickReady<span>Sites</span></a>
-  <p>Built for business. Ready to click.</p>
-  <p style="margin-top:8px">© 2026 ClickReady Sites</p>
+  <a href="dashboard.html" class="logo">Profit<span style="color:var(--green)">Pulse</span></a>
+  <p style="margin-top:8px;">Know your numbers. Run a better business.</p>
+  <p style="margin-top:6px;">© 2026 ProfitPulse</p>
 </footer>
 
 </body>
