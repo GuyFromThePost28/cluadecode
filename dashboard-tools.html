@@ -64,33 +64,27 @@
     .field input:focus { outline: none; border-color: var(--green); box-shadow: 0 0 0 3px rgba(22,163,74,0.1); }
     .field input::placeholder { color: #d1d5db; }
 
-    /* ── CLEAN INPUT CARD ── */
-    .input-card { background: #fff; border-radius: var(--radius); border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,0.04); overflow: hidden; }
-    .input-card-header { padding: 20px 22px 16px; border-bottom: 1px solid var(--border); }
-    .input-card-header h3 { font-size: 0.95rem; font-weight: 800; color: var(--text); letter-spacing: -0.3px; }
-    .input-card-header p { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
-    .input-section { padding: 16px 22px; }
+    /* ── PROFESSIONAL INPUT CARD ── */
+    .input-card { background: #fff; border-radius: var(--radius); border: 1px solid var(--border); box-shadow: 0 1px 4px rgba(0,0,0,0.05); overflow: hidden; }
+    .input-card-header { padding: 22px 24px 18px; border-bottom: 1px solid var(--border); }
+    .input-card-header h3 { font-size: 0.92rem; font-weight: 700; color: var(--text); letter-spacing: -0.2px; }
+    .input-card-header p { font-size: 0.75rem; color: var(--muted); margin-top: 3px; }
+    .input-section { padding: 20px 24px; }
     .input-section + .input-section { border-top: 1px solid var(--border); }
-    .section-tag { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: var(--muted); margin-bottom: 14px; }
-    .input-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
-    .input-row:last-child { margin-bottom: 0; }
-    .field-icon { width: 34px; height: 34px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
-    .field-icon.purple { background: #f3e8ff; }
-    .field-icon.blue   { background: #eff6ff; }
-    .field-icon.green  { background: #f0fdf4; }
-    .field-icon.orange { background: #fff7ed; }
-    .field-icon.pink   { background: #fdf2f8; }
-    .field-body { flex: 1; min-width: 0; }
-    .field-body .flabel { font-size: 0.78rem; font-weight: 700; color: var(--text); margin-bottom: 5px; display: block; }
-    .input-wrap { display: flex; align-items: center; background: var(--bg2); border: 1.5px solid var(--border); border-radius: 8px; overflow: hidden; transition: border-color 0.2s, box-shadow 0.2s; }
-    .input-wrap:focus-within { border-color: var(--green); box-shadow: 0 0 0 3px rgba(22,163,74,0.1); }
-    .input-prefix { padding: 0 10px; font-size: 0.85rem; font-weight: 700; color: var(--muted); background: #f3f4f6; border-right: 1px solid var(--border); align-self: stretch; display: flex; align-items: center; }
-    .input-wrap input { border: none; background: transparent; flex: 1; padding: 9px 10px; color: var(--text); font-size: 0.92rem; font-family: inherit; min-width: 0; }
+    .section-tag { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.4px; color: #9ca3af; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+    .section-tag::before { content: ''; width: 3px; height: 12px; background: var(--green); border-radius: 2px; display: inline-block; }
+    .pro-field { margin-bottom: 16px; }
+    .pro-field:last-child { margin-bottom: 0; }
+    .pro-field .flabel { font-size: 0.78rem; font-weight: 600; color: #374151; margin-bottom: 6px; display: block; }
+    .input-wrap { display: flex; align-items: stretch; background: #fff; border: 1.5px solid var(--border); border-radius: 8px; overflow: hidden; transition: border-color 0.18s, box-shadow 0.18s; }
+    .input-wrap:focus-within { border-color: var(--green); box-shadow: 0 0 0 3px rgba(22,163,74,0.08); }
+    .input-prefix { padding: 0 12px; font-size: 0.8rem; font-weight: 600; color: #9ca3af; background: #f9fafb; border-right: 1px solid var(--border); display: flex; align-items: center; letter-spacing: 0.2px; }
+    .input-wrap input { border: none; background: transparent; flex: 1; padding: 10px 12px; color: var(--text); font-size: 0.92rem; font-family: inherit; min-width: 0; font-weight: 500; }
     .input-wrap input:focus { outline: none; }
-    .input-wrap input::placeholder { color: #d1d5db; }
-    .input-card-footer { padding: 14px 22px; border-top: 1px solid var(--border); background: var(--bg2); display: flex; align-items: center; gap: 10px; }
-    .btn-reset { padding: 7px 16px; border-radius: 7px; font-size: 0.8rem; font-weight: 700; cursor: pointer; border: 1.5px solid var(--border); background: #fff; color: var(--muted); font-family: inherit; transition: all 0.15s; }
-    .btn-reset:hover { border-color: #dc2626; color: #dc2626; }
+    .input-wrap input::placeholder { color: #d1d5db; font-weight: 400; }
+    .input-card-footer { padding: 14px 24px; border-top: 1px solid var(--border); background: #fafafa; display: flex; align-items: center; gap: 10px; }
+    .btn-reset { padding: 7px 16px; border-radius: 7px; font-size: 0.78rem; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: #fff; color: #9ca3af; font-family: inherit; transition: all 0.15s; letter-spacing: 0.2px; }
+    .btn-reset:hover { border-color: #ef4444; color: #ef4444; background: #fff5f5; }
 
     /* ── GAUGE ── */
     .gauge-wrap { display: flex; flex-direction: column; align-items: center; padding: 20px 0 8px; }
@@ -225,68 +219,53 @@
         <div class="input-card">
           <div class="input-card-header">
             <h3>Your Business Numbers</h3>
-            <p>Fill in what you know — results update instantly</p>
+            <p>Results update as you type and save automatically</p>
           </div>
 
           <div class="input-section">
-            <div class="section-tag">💼 Your Costs</div>
+            <div class="section-tag">Costs</div>
 
-            <div class="input-row">
-              <div class="field-icon purple">🧾</div>
-              <div class="field-body">
-                <span class="flabel">Monthly Bills</span>
-                <div class="input-wrap">
-                  <span class="input-prefix">$</span>
-                  <input type="number" id="fixedCosts" placeholder="2,000" min="0">
-                </div>
+            <div class="pro-field">
+              <span class="flabel">Monthly Bills</span>
+              <div class="input-wrap">
+                <span class="input-prefix">$</span>
+                <input type="number" id="fixedCosts" placeholder="0" min="0">
               </div>
             </div>
 
-            <div class="input-row">
-              <div class="field-icon blue">📦</div>
-              <div class="field-body">
-                <span class="flabel">Cost Per Sale</span>
-                <div class="input-wrap">
-                  <span class="input-prefix">$</span>
-                  <input type="number" id="varCost" placeholder="8" min="0">
-                </div>
+            <div class="pro-field">
+              <span class="flabel">Cost Per Sale</span>
+              <div class="input-wrap">
+                <span class="input-prefix">$</span>
+                <input type="number" id="varCost" placeholder="0" min="0">
               </div>
             </div>
 
-            <div class="input-row">
-              <div class="field-icon green">🏷️</div>
-              <div class="field-body">
-                <span class="flabel">Your Price Per Sale</span>
-                <div class="input-wrap">
-                  <span class="input-prefix">$</span>
-                  <input type="number" id="price" placeholder="25" min="0">
-                </div>
+            <div class="pro-field">
+              <span class="flabel">Price Per Sale</span>
+              <div class="input-wrap">
+                <span class="input-prefix">$</span>
+                <input type="number" id="price" placeholder="0" min="0">
               </div>
             </div>
           </div>
 
           <div class="input-section">
-            <div class="section-tag">🎯 Your Goals</div>
+            <div class="section-tag">Goals</div>
 
-            <div class="input-row">
-              <div class="field-icon orange">📊</div>
-              <div class="field-body">
-                <span class="flabel">Sales Per Month</span>
-                <div class="input-wrap">
-                  <span class="input-prefix">#</span>
-                  <input type="number" id="sales" placeholder="100" min="0">
-                </div>
+            <div class="pro-field">
+              <span class="flabel">Sales Per Month</span>
+              <div class="input-wrap">
+                <span class="input-prefix">#</span>
+                <input type="number" id="sales" placeholder="0" min="0">
               </div>
             </div>
 
-            <div class="input-row">
-              <div class="field-icon pink">💸</div>
-              <div class="field-body">
-                <span class="flabel">Monthly Income Goal</span>
-                <div class="input-wrap">
-                  <span class="input-prefix">$</span>
-                  <input type="number" id="goal" placeholder="3,000" min="0">
-                </div>
+            <div class="pro-field">
+              <span class="flabel">Monthly Income Goal</span>
+              <div class="input-wrap">
+                <span class="input-prefix">$</span>
+                <input type="number" id="goal" placeholder="0" min="0">
               </div>
             </div>
           </div>
@@ -425,27 +404,17 @@
   function fmt(n) { return '$' + Math.round(n).toLocaleString(); }
 
   // ── 3D MINI GAUGE ────────────────────────────────────────
-  function miniGauge(pct, c1, c2, label, displayVal) {
+  function miniGauge(pct, label, displayVal) {
     const total = 144.5;
     const capped = Math.min(100, Math.max(0, pct || 0));
     const offset = total * (1 - capped / 100);
-    const uid = 'g' + Math.random().toString(36).slice(2, 8);
     return `
       <div class="gauge3d">
         <svg width="110" height="65" viewBox="0 0 110 65">
-          <defs>
-            <linearGradient id="${uid}" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stop-color="${c1}"/>
-              <stop offset="100%" stop-color="${c2}"/>
-            </linearGradient>
-            <filter id="f${uid}" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="blur"/>
-              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-            </filter>
-          </defs>
-          <path d="M 9 60 A 46 46 0 0 1 101 60" fill="none" stroke="#e5e7eb" stroke-width="10" stroke-linecap="round"/>
-          <path d="M 9 60 A 46 46 0 0 1 101 60" fill="none" stroke="url(#${uid})" stroke-width="10" stroke-linecap="round"
-                stroke-dasharray="${total}" stroke-dashoffset="${offset}" filter="url(#f${uid})"/>
+          <path d="M 9 60 A 46 46 0 0 1 101 60" fill="none" stroke="#e9f7ef" stroke-width="10" stroke-linecap="round"/>
+          <path d="M 9 60 A 46 46 0 0 1 101 60" fill="none" stroke="rgba(34,197,94,0.55)" stroke-width="10" stroke-linecap="round"
+                stroke-dasharray="${total}" stroke-dashoffset="${offset}"
+                style="transition: stroke-dashoffset 0.75s cubic-bezier(0.4,0,0.2,1)"/>
         </svg>
         <div class="g3d-val">${displayVal}</div>
         <div class="g3d-label">${label}</div>
@@ -525,10 +494,10 @@
     const goalPct = goal > 0 ? Math.max(0, (profit / goal) * 100) : 0;
 
     let html = '<div class="gauge-grid">';
-    html += miniGauge(marginPct, '#a855f7', '#7c3aed', 'Profit Margin', marginPct.toFixed(1) + '%');
-    html += miniGauge(bePct,     '#3b82f6', '#2563eb', 'Break-Even Hit', Math.min(100, Math.round(bePct)) + '%');
-    html += miniGauge(goalPct,   '#22c55e', '#16a34a', 'Goal Progress',  Math.min(100, Math.round(goalPct)) + '%');
-    html += miniGauge(score,     '#f97316', '#ea580c', 'Health Score',   Math.round(score));
+    html += miniGauge(marginPct, 'Profit Margin',  marginPct.toFixed(1) + '%');
+    html += miniGauge(bePct,     'Break-Even Hit', Math.min(100, Math.round(bePct)) + '%');
+    html += miniGauge(goalPct,   'Goal Progress',  Math.min(100, Math.round(goalPct)) + '%');
+    html += miniGauge(score,     'Health Score',   Math.round(score));
     html += '</div>';
 
     html += `<div class="info-row">
