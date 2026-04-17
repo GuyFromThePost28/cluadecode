@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Flappy Batman</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0a0a0a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    canvas {
+      border: 2px solid #333;
+      display: block;
+      image-rendering: pixelated;
+    }
+    #ui {
+      color: #f0c040;
+      font-size: 0.9rem;
+      margin-top: 8px;
+      letter-spacing: 1px;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+<canvas id="c" width="400" height="600"></canvas>
+<div id="ui">SPACE / TAP to flap</div>
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const W = canvas.width, H = canvas.height;
+
+// ── colours ──────────────────────────────────────────────
+const SKY_TOP    = '#0d0d1a';
+const SKY_BOT    = '#1a1a3a';
+const PIPE_COLOR = '#1c3a1c';
+const PIPE_EDGE  = '#2a5a2a';
+const GROUND_COL = '#1a1200';
+const GROUND_TOP = '#2a2000';
+
+// ── game constants ────────────────────────────────────────
+const GRAVITY   = 0.38;
+const FLAP      = -7.2;
+const PIPE_W    = 58;
+const PIPE_GAP  = 165;
+const PIPE_SPD  = 2.4;
+const GROUND_H  = 60;
+const BATMAN_W  = 46;
+const BATMAN_H  = 36;
+
+// ── state ─────────────────────────────────────────────────
+let state, vy, bx, by, pipes, score, best, frames, stars;
+
+function init() {
+  state  = 'idle';   // idle | play | dead
+  vy     = 0;
+  bx     = 110;
+  by     = H / 2 - 30;
+  pipes  = [];
+  score  = 0;
+  frames = 0;
+  best   = best || 0;
+  stars  = Array.from({length: 60}, () => ({
+    x: Math.random() * W,
+    y: Math.random() * (H - GROUND_H) * 0.7,
+    r: Math.random() * 1.4 + 0.3,
+    a: Math.random()
+  }));
+}
+
+function flap() {
+  if (state === 'dead') { init(); return; }
+  if (state === 'idle') state = 'play';
+  vy = FLAP;
+}
+
+// ── drawing helpers ───────────────────────────────────────
+function drawBackground() {
+  const g = ctx.createLinearGradient(0, 0, 0, H - GROUND_H);
+  g.addColorStop(0, SKY_TOP);
+  g.addColorStop(1, SKY_BOT);
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, W, H - GROUND_H);
+
+  // moon
+  ctx.beginPath();
+  ctx.arc(320, 60, 28, 0, Math.PI * 2);
+  ctx.fillStyle = '#fffde0';
+  ctx.shadowColor = '#fffde0';
+  ctx.shadowBlur = 30;
+  ctx.fill();
+  ctx.shadowBlur = 0;
+
+  // city silhouette
+  ctx.fillStyle = '#0a0a14';
+  const buildings = [
+    [0,140,30,80],[30,160,20,60],[50,120,35,100],[85,150,25,70],
+    [110,130,30,90],[140,155,20,65],[160,110,40,110],[200,140,28,80],
+    [228,130,22,90],[250,150,30,70],[280,120,38,100],[318,145,25,75],
+    [343,135,20,85],[363,150,37,70]
+  ];
+  buildings.forEach(([x,y,w,h]) => ctx.fillRect(x, y, w, h));
+
+  // bat signal on moon
+  ctx.save();
+  ctx.globalAlpha = 0.18;
+  ctx.fillStyle = '#000';
+  drawBatSymbol(320, 60, 14);
+  ctx.restore();
+
+  // stars
+  stars.forEach(s => {
+    s.a += 0.015;
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255,255,220,${0.4 + 0.4 * Math.abs(Math.sin(s.a))})`;
+    ctx.fill();
+  });
+}
+
+function drawGround() {
+  ctx.fillStyle = GROUND_COL;
+  ctx.fillRect(0, H - GROUND_H, W, GROUND_H);
+  ctx.fillStyle = GROUND_TOP;
+  ctx.fillRect(0, H - GROUND_H, W, 8);
+  // road markings
+  ctx.fillStyle = '#2a2000';
+  for (let x = (frames * PIPE_SPD) % 60; x < W; x += 60) {
+    ctx.fillRect(x, H - GROUND_H + 20, 30, 4);
+  }
+}
+
+function drawPipe(x, topH) {
+  const botY = topH + PIPE_GAP;
+  const botH = H - GROUND_H - botY;
+  const cap  = 10;
+
+  // top pipe
+  ctx.fillStyle = PIPE_COLOR;
+  ctx.fillRect(x, 0, PIPE_W, topH);
+  ctx.fillStyle = PIPE_EDGE;
+  ctx.fillRect(x - 4, topH - 22, PIPE_W + 8, 22);
+  ctx.fillRect(x, 0, 4, topH);
+  ctx.fillRect(x + PIPE_W - 4, 0, 4, topH);
+
+  // bottom pipe
+  ctx.fillStyle = PIPE_COLOR;
+  ctx.fillRect(x, botY, PIPE_W, botH);
+  ctx.fillStyle = PIPE_EDGE;
+  ctx.fillRect(x - 4, botY, PIPE_W + 8, 22);
+  ctx.fillRect(x, botY, 4, botH);
+  ctx.fillRect(x + PIPE_W - 4, botY, 4, botH);
+}
+
+function drawBatSymbol(cx, cy, size) {
+  // simple bat wing shape
+  ctx.beginPath();
+  ctx.moveTo(cx, cy - size * 0.2);
+  ctx.bezierCurveTo(cx - size * 0.3, cy - size * 0.8, cx - size, cy - size * 0.6, cx - size, cy + size * 0.2);
+  ctx.bezierCurveTo(cx - size * 0.7, cy + size * 0.1, cx - size * 0.4, cy + size * 0.4, cx, cy + size * 0.2);
+  ctx.bezierCurveTo(cx + size * 0.4, cy + size * 0.4, cx + size * 0.7, cy + size * 0.1, cx + size, cy + size * 0.2);
+  ctx.bezierCurveTo(cx + size, cy - size * 0.6, cx + size * 0.3, cy - size * 0.8, cx, cy - size * 0.2);
+  ctx.closePath();
+  ctx.fill();
+}
+
+function drawBatman(x, y, angle) {
+  ctx.save();
+  ctx.translate(x + BATMAN_W / 2, y + BATMAN_H / 2);
+  ctx.rotate(angle);
+
+  const cx = 0, cy = 0;
+
+  // ── cape (wings) ──
+  const flapOff = Math.sin(frames * 0.25) * 4;
+  ctx.fillStyle = '#111';
+  // left wing
+  ctx.beginPath();
+  ctx.moveTo(cx - 4, cy + 4);
+  ctx.bezierCurveTo(cx - 14, cy - 10 + flapOff, cx - 32, cy - 18 + flapOff, cx - 38, cy - 4 + flapOff);
+  ctx.bezierCurveTo(cx - 30, cy + 14, cx - 14, cy + 12, cx - 4, cy + 10);
+  ctx.closePath();
+  ctx.fill();
+  // right wing
+  ctx.beginPath();
+  ctx.moveTo(cx + 4, cy + 4);
+  ctx.bezierCurveTo(cx + 14, cy - 10 + flapOff, cx + 32, cy - 18 + flapOff, cx + 38, cy - 4 + flapOff);
+  ctx.bezierCurveTo(cx + 30, cy + 14, cx + 14, cy + 12, cx + 4, cy + 10);
+  ctx.closePath();
+  ctx.fill();
+
+  // ── body ──
+  ctx.fillStyle = '#1a1a1a';
+  ctx.beginPath();
+  ctx.ellipse(cx, cy + 4, 10, 13, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // ── head ──
+  ctx.fillStyle = '#1a1a1a';
+  ctx.beginPath();
+  ctx.ellipse(cx, cy - 6, 9, 9, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // bat ears
+  ctx.fillStyle = '#111';
+  ctx.beginPath();
+  ctx.moveTo(cx - 5, cy - 12);
+  ctx.lineTo(cx - 9, cy - 22);
+  ctx.lineTo(cx - 2, cy - 13);
+  ctx.closePath();
+  ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(cx + 5, cy - 12);
+  ctx.lineTo(cx + 9, cy - 22);
+  ctx.lineTo(cx + 2, cy - 13);
+  ctx.closePath();
+  ctx.fill();
+
+  // mask (white eyes)
+  ctx.fillStyle = '#fff';
+  ctx.beginPath();
+  ctx.ellipse(cx - 3, cy - 7, 2.5, 1.8, -0.3, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.ellipse(cx + 3, cy - 7, 2.5, 1.8, 0.3, 0, Math.PI * 2);
+  ctx.fill();
+
+  // bat symbol on chest
+  ctx.fillStyle = '#f0c040';
+  ctx.save();
+  ctx.scale(0.38, 0.38);
+  drawBatSymbol(cx / 0.38, (cy + 6) / 0.38, 9);
+  ctx.restore();
+
+  ctx.restore();
+}
+
+function drawHUD() {
+  ctx.fillStyle = '#f0c040';
+  ctx.font = 'bold 36px Arial';
+  ctx.textAlign = 'center';
+  ctx.shadowColor = '#000';
+  ctx.shadowBlur = 6;
+  ctx.fillText(score, W / 2, 52);
+  ctx.shadowBlur = 0;
+}
+
+function drawIdle() {
+  ctx.fillStyle = 'rgba(0,0,0,0.55)';
+  ctx.fillRect(60, H / 2 - 90, W - 120, 160);
+  ctx.strokeStyle = '#f0c040';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(60, H / 2 - 90, W - 120, 160);
+
+  ctx.fillStyle = '#f0c040';
+  ctx.font = 'bold 36px Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText('FLAPPY BATMAN', W / 2, H / 2 - 42);
+
+  ctx.fillStyle = '#ccc';
+  ctx.font = '16px Arial';
+  ctx.fillText('Press SPACE or Tap to start', W / 2, H / 2 + 4);
+  ctx.fillText(`Best: ${best}`, W / 2, H / 2 + 34);
+}
+
+function drawDead() {
+  ctx.fillStyle = 'rgba(0,0,0,0.62)';
+  ctx.fillRect(50, H / 2 - 110, W - 100, 190);
+  ctx.strokeStyle = '#e94040';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(50, H / 2 - 110, W - 100, 190);
+
+  ctx.fillStyle = '#e94040';
+  ctx.font = 'bold 34px Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText('BATMAN FELL!', W / 2, H / 2 - 58);
+
+  ctx.fillStyle = '#f0c040';
+  ctx.font = 'bold 22px Arial';
+  ctx.fillText(`Score: ${score}`, W / 2, H / 2 - 18);
+  ctx.fillText(`Best:  ${best}`, W / 2, H / 2 + 16);
+
+  ctx.fillStyle = '#aaa';
+  ctx.font = '15px Arial';
+  ctx.fillText('Press SPACE or Tap to retry', W / 2, H / 2 + 56);
+}
+
+// ── collision ─────────────────────────────────────────────
+function hitTest() {
+  const bLeft  = bx + 8;
+  const bRight = bx + BATMAN_W - 8;
+  const bTop   = by + 6;
+  const bBot   = by + BATMAN_H - 4;
+
+  if (bBot >= H - GROUND_H || bTop <= 0) return true;
+
+  for (const p of pipes) {
+    if (bRight > p.x + 4 && bLeft < p.x + PIPE_W - 4) {
+      if (bTop < p.topH - 8 || bBot > p.topH + PIPE_GAP + 8) return true;
+    }
+  }
+  return false;
+}
+
+// ── main loop ─────────────────────────────────────────────
+function loop() {
+  requestAnimationFrame(loop);
+  frames++;
+
+  // background
+  drawBackground();
+
+  if (state === 'play') {
+    // spawn pipes
+    if (frames % 82 === 0) {
+      const minH = 60, maxH = H - GROUND_H - PIPE_GAP - 60;
+      pipes.push({ x: W, topH: minH + Math.random() * (maxH - minH), scored: false });
+    }
+
+    // move pipes
+    for (const p of pipes) {
+      p.x -= PIPE_SPD;
+      if (!p.scored && p.x + PIPE_W < bx) {
+        score++;
+        if (score > best) best = score;
+        p.scored = true;
+      }
+    }
+    pipes = pipes.filter(p => p.x + PIPE_W > -10);
+
+    // gravity
+    vy += GRAVITY;
+    by += vy;
+
+    if (hitTest()) {
+      state = 'dead';
+      vy = 0;
+    }
+  } else if (state === 'idle') {
+    // gentle hover
+    by = H / 2 - 30 + Math.sin(frames * 0.04) * 8;
+  }
+
+  // draw pipes
+  for (const p of pipes) drawPipe(p.x, p.topH);
+
+  drawGround();
+
+  // batman angle
+  const angle = state === 'play' ? Math.max(-0.45, Math.min(0.9, vy * 0.055)) : 0;
+  drawBatman(bx, by, angle);
+
+  drawHUD();
+  if (state === 'idle') drawIdle();
+  if (state === 'dead') drawDead();
+}
+
+// ── input ─────────────────────────────────────────────────
+document.addEventListener('keydown', e => { if (e.code === 'Space') { e.preventDefault(); flap(); } });
+canvas.addEventListener('pointerdown', e => { e.preventDefault(); flap(); });
+
+init();
+loop();
+</script>
+</body>
+</html>
