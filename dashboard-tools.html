@@ -64,6 +64,34 @@
     .field input:focus { outline: none; border-color: var(--green); box-shadow: 0 0 0 3px rgba(22,163,74,0.1); }
     .field input::placeholder { color: #d1d5db; }
 
+    /* ── CLEAN INPUT CARD ── */
+    .input-card { background: #fff; border-radius: var(--radius); border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,0.04); overflow: hidden; }
+    .input-card-header { padding: 20px 22px 16px; border-bottom: 1px solid var(--border); }
+    .input-card-header h3 { font-size: 0.95rem; font-weight: 800; color: var(--text); letter-spacing: -0.3px; }
+    .input-card-header p { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+    .input-section { padding: 16px 22px; }
+    .input-section + .input-section { border-top: 1px solid var(--border); }
+    .section-tag { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: var(--muted); margin-bottom: 14px; }
+    .input-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+    .input-row:last-child { margin-bottom: 0; }
+    .field-icon { width: 34px; height: 34px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+    .field-icon.purple { background: #f3e8ff; }
+    .field-icon.blue   { background: #eff6ff; }
+    .field-icon.green  { background: #f0fdf4; }
+    .field-icon.orange { background: #fff7ed; }
+    .field-icon.pink   { background: #fdf2f8; }
+    .field-body { flex: 1; min-width: 0; }
+    .field-body .flabel { font-size: 0.78rem; font-weight: 700; color: var(--text); margin-bottom: 5px; display: block; }
+    .input-wrap { display: flex; align-items: center; background: var(--bg2); border: 1.5px solid var(--border); border-radius: 8px; overflow: hidden; transition: border-color 0.2s, box-shadow 0.2s; }
+    .input-wrap:focus-within { border-color: var(--green); box-shadow: 0 0 0 3px rgba(22,163,74,0.1); }
+    .input-prefix { padding: 0 10px; font-size: 0.85rem; font-weight: 700; color: var(--muted); background: #f3f4f6; border-right: 1px solid var(--border); align-self: stretch; display: flex; align-items: center; }
+    .input-wrap input { border: none; background: transparent; flex: 1; padding: 9px 10px; color: var(--text); font-size: 0.92rem; font-family: inherit; min-width: 0; }
+    .input-wrap input:focus { outline: none; }
+    .input-wrap input::placeholder { color: #d1d5db; }
+    .input-card-footer { padding: 14px 22px; border-top: 1px solid var(--border); background: var(--bg2); display: flex; align-items: center; gap: 10px; }
+    .btn-reset { padding: 7px 16px; border-radius: 7px; font-size: 0.8rem; font-weight: 700; cursor: pointer; border: 1.5px solid var(--border); background: #fff; color: var(--muted); font-family: inherit; transition: all 0.15s; }
+    .btn-reset:hover { border-color: #dc2626; color: #dc2626; }
+
     /* ── GAUGE ── */
     .gauge-wrap { display: flex; flex-direction: column; align-items: center; padding: 20px 0 8px; }
     .gauge-wrap svg { overflow: visible; }
@@ -194,35 +222,77 @@
       <div class="grid2">
 
         <!-- Inputs -->
-        <div class="card">
-          <div class="card-title">Your Numbers</div>
-          <div class="field">
-            <label>Monthly Bills ($)</label>
-            <div class="hint">How much you pay every month no matter what — rent, phone, apps, staff</div>
-            <input type="number" id="fixedCosts" placeholder="e.g. 2000" min="0">
+        <div class="input-card">
+          <div class="input-card-header">
+            <h3>Your Business Numbers</h3>
+            <p>Fill in what you know — results update instantly</p>
           </div>
-          <div class="field">
-            <label>What Each Sale Costs You ($)</label>
-            <div class="hint">What you spend to make or deliver one item — supplies, packaging, shipping</div>
-            <input type="number" id="varCost" placeholder="e.g. 8" min="0">
+
+          <div class="input-section">
+            <div class="section-tag">💼 Your Costs</div>
+
+            <div class="input-row">
+              <div class="field-icon purple">🧾</div>
+              <div class="field-body">
+                <span class="flabel">Monthly Bills</span>
+                <div class="input-wrap">
+                  <span class="input-prefix">$</span>
+                  <input type="number" id="fixedCosts" placeholder="2,000" min="0">
+                </div>
+              </div>
+            </div>
+
+            <div class="input-row">
+              <div class="field-icon blue">📦</div>
+              <div class="field-body">
+                <span class="flabel">Cost Per Sale</span>
+                <div class="input-wrap">
+                  <span class="input-prefix">$</span>
+                  <input type="number" id="varCost" placeholder="8" min="0">
+                </div>
+              </div>
+            </div>
+
+            <div class="input-row">
+              <div class="field-icon green">🏷️</div>
+              <div class="field-body">
+                <span class="flabel">Your Price Per Sale</span>
+                <div class="input-wrap">
+                  <span class="input-prefix">$</span>
+                  <input type="number" id="price" placeholder="25" min="0">
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="field">
-            <label>What You Charge Per Sale ($)</label>
-            <div class="hint">The price your customer pays you</div>
-            <input type="number" id="price" placeholder="e.g. 25" min="0">
+
+          <div class="input-section">
+            <div class="section-tag">🎯 Your Goals</div>
+
+            <div class="input-row">
+              <div class="field-icon orange">📊</div>
+              <div class="field-body">
+                <span class="flabel">Sales Per Month</span>
+                <div class="input-wrap">
+                  <span class="input-prefix">#</span>
+                  <input type="number" id="sales" placeholder="100" min="0">
+                </div>
+              </div>
+            </div>
+
+            <div class="input-row">
+              <div class="field-icon pink">💸</div>
+              <div class="field-body">
+                <span class="flabel">Monthly Income Goal</span>
+                <div class="input-wrap">
+                  <span class="input-prefix">$</span>
+                  <input type="number" id="goal" placeholder="3,000" min="0">
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="field">
-            <label>How Many Sales You Make Per Month</label>
-            <div class="hint">Your best guess at how many you sell in a normal month</div>
-            <input type="number" id="sales" placeholder="e.g. 100" min="0">
-          </div>
-          <div class="field">
-            <label>How Much You Want to Make ($)</label>
-            <div class="hint">The amount you want to walk away with each month after paying everything</div>
-            <input type="number" id="goal" placeholder="e.g. 3000" min="0">
-          </div>
-          <div class="btn-row">
-            <button class="btn btn-ghost" onclick="resetDashboard()">Reset</button>
+
+          <div class="input-card-footer">
+            <button class="btn-reset" onclick="resetDashboard()">Clear</button>
             <span class="saved-tag" id="savedNotice">Saved ✓</span>
           </div>
         </div>
