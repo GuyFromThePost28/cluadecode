@@ -143,7 +143,7 @@
     <!-- ── PAGE: DASHBOARD ── -->
     <div class="page active" id="page-dashboard">
       <div class="page-heading">Business Dashboard</div>
-      <p class="page-sub">Enter your numbers — everything updates instantly and saves automatically.</p>
+      <p class="page-sub">Fill in what you know — your results show up right away and save automatically so you can come back anytime.</p>
 
       <div class="grid2">
 
@@ -151,28 +151,28 @@
         <div class="card">
           <div class="card-title">Your Numbers</div>
           <div class="field">
-            <label>Monthly Fixed Costs ($)</label>
-            <div class="hint">Rent, salaries, subscriptions</div>
+            <label>Monthly Bills ($)</label>
+            <div class="hint">How much you pay every month no matter what — rent, phone, apps, staff</div>
             <input type="number" id="fixedCosts" placeholder="e.g. 2000" min="0">
           </div>
           <div class="field">
-            <label>Variable Cost Per Sale ($)</label>
-            <div class="hint">Materials, shipping, fees per unit</div>
+            <label>What Each Sale Costs You ($)</label>
+            <div class="hint">What you spend to make or deliver one item — supplies, packaging, shipping</div>
             <input type="number" id="varCost" placeholder="e.g. 8" min="0">
           </div>
           <div class="field">
-            <label>Your Selling Price ($)</label>
-            <div class="hint">What you charge per product or service</div>
+            <label>What You Charge Per Sale ($)</label>
+            <div class="hint">The price your customer pays you</div>
             <input type="number" id="price" placeholder="e.g. 25" min="0">
           </div>
           <div class="field">
-            <label>Monthly Sales Volume</label>
-            <div class="hint">How many units or clients per month</div>
+            <label>How Many Sales You Make Per Month</label>
+            <div class="hint">Your best guess at how many you sell in a normal month</div>
             <input type="number" id="sales" placeholder="e.g. 100" min="0">
           </div>
           <div class="field">
-            <label>Monthly Income Goal ($)</label>
-            <div class="hint">What you want to take home after costs</div>
+            <label>How Much You Want to Make ($)</label>
+            <div class="hint">The amount you want to walk away with each month after paying everything</div>
             <input type="number" id="goal" placeholder="e.g. 3000" min="0">
           </div>
           <div class="btn-row">
@@ -209,29 +209,29 @@
     <!-- ── PAGE: PRICING CALCULATOR ── -->
     <div class="page" id="page-pricing">
       <div class="page-heading">Pricing Calculator</div>
-      <p class="page-sub">What should you charge? Enter your cost and target margin to find out.</p>
+      <p class="page-sub">Not sure what to charge? Enter what it costs you and how much you want to make — we'll tell you the right price.</p>
 
       <div class="grid2">
         <div class="card">
           <div class="card-title">Your Inputs</div>
           <div class="field">
-            <label>Cost Per Unit / Service ($)</label>
-            <div class="hint">What it costs you to deliver one sale</div>
+            <label>What It Costs You to Make or Do One Sale ($)</label>
+            <div class="hint">Supplies, ingredients, materials — whatever you spend per item</div>
             <input type="number" id="pc_cost" placeholder="e.g. 12" min="0">
           </div>
           <div class="field">
-            <label>Target Profit Margin (%)</label>
-            <div class="hint">What % of each sale should be profit (20–50% is common)</div>
+            <label>How Much Profit Do You Want to Keep? (%)</label>
+            <div class="hint">Out of every dollar you charge, how many cents do you want to keep? 30–50% is a good target</div>
             <input type="number" id="pc_margin" placeholder="e.g. 40" min="1" max="99">
           </div>
           <div class="field">
-            <label>Monthly Overhead ($) <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
-            <div class="hint">Fixed costs to spread across your sales volume</div>
+            <label>Your Monthly Bills ($) <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
+            <div class="hint">Rent, phone, apps — leave blank if you already included it above</div>
             <input type="number" id="pc_overhead" placeholder="e.g. 500" min="0">
           </div>
           <div class="field">
-            <label>Expected Monthly Sales</label>
-            <div class="hint">How many units you expect to sell</div>
+            <label>How Many Sales You Expect Per Month</label>
+            <div class="hint">Just a rough number is fine</div>
             <input type="number" id="pc_units" placeholder="e.g. 50" min="1">
           </div>
         </div>
@@ -248,23 +248,24 @@
     <!-- ── PAGE: BREAK-EVEN ── -->
     <div class="page" id="page-breakeven">
       <div class="page-heading">Break-Even Calculator</div>
-      <p class="page-sub">How many sales do you need each month just to cover your costs?</p>
+      <p class="page-sub">This tells you the minimum number of sales you need each month just to pay your bills — before you make any profit.</p>
 
       <div class="grid2">
         <div class="card">
           <div class="card-title">Your Inputs</div>
           <div class="field">
-            <label>Monthly Fixed Costs ($)</label>
-            <div class="hint">Rent, salaries, subscriptions — everything you pay no matter what</div>
+            <label>Your Monthly Bills ($)</label>
+            <div class="hint">Everything you pay each month whether you sell anything or not — rent, staff, apps</div>
             <input type="number" id="be_fixed" placeholder="e.g. 1500" min="0">
           </div>
           <div class="field">
-            <label>Selling Price Per Unit ($)</label>
+            <label>What You Charge Per Sale ($)</label>
+            <div class="hint">The price your customer pays</div>
             <input type="number" id="be_price" placeholder="e.g. 30" min="0">
           </div>
           <div class="field">
-            <label>Variable Cost Per Unit ($)</label>
-            <div class="hint">Materials, shipping, fees per sale</div>
+            <label>What Each Sale Costs You ($)</label>
+            <div class="hint">Supplies, packaging, or anything you spend to make that one sale happen</div>
             <input type="number" id="be_var" placeholder="e.g. 10" min="0">
           </div>
         </div>
@@ -281,18 +282,19 @@
     <!-- ── PAGE: MARGIN ── -->
     <div class="page" id="page-margin">
       <div class="page-heading">Profit Margin Calculator</div>
-      <p class="page-sub">See exactly how much profit you make on every single sale.</p>
+      <p class="page-sub">Out of every dollar a customer pays you, how much do you actually keep? Enter your price and your cost to find out.</p>
 
       <div class="grid2">
         <div class="card">
           <div class="card-title">Your Inputs</div>
           <div class="field">
-            <label>Selling Price ($)</label>
+            <label>What You Charge ($)</label>
+            <div class="hint">The price your customer pays you</div>
             <input type="number" id="pm_price" placeholder="e.g. 50" min="0">
           </div>
           <div class="field">
-            <label>Cost Per Sale ($)</label>
-            <div class="hint">Variable cost — materials, fees, shipping</div>
+            <label>What It Costs You ($)</label>
+            <div class="hint">What you actually spend to make or deliver that one sale</div>
             <input type="number" id="pm_cost" placeholder="e.g. 20" min="0">
           </div>
         </div>
