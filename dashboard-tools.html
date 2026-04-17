@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Profit Pulse — Your Business Dashboard</title>
+  <title>Profit Pulse — Dashboard</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -17,229 +17,331 @@
       --muted:    #6b7280;
       --border:   #e5e7eb;
       --radius:   12px;
+      --sidebar:  240px;
     }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: var(--text); background: var(--bg2); line-height: 1.6; min-height: 100vh; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: var(--text); background: var(--bg2); line-height: 1.6; display: flex; flex-direction: column; min-height: 100vh; }
 
-    header { background: #fff; border-bottom: 1px solid var(--border); padding: 0 28px; height: 64px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
-    .logo { font-size: 1.2rem; font-weight: 800; color: var(--text); letter-spacing: -0.5px; }
+    /* ── HEADER ── */
+    header { background: #fff; border-bottom: 1px solid var(--border); height: 60px; display: flex; align-items: center; padding: 0 24px; gap: 16px; position: sticky; top: 0; z-index: 200; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+    .logo { font-size: 1.15rem; font-weight: 800; color: var(--text); letter-spacing: -0.5px; }
     .logo span { color: var(--green); }
-    .header-badge { background: var(--green-bg); color: var(--green); font-size: 0.75rem; font-weight: 600; padding: 4px 12px; border-radius: 99px; border: 1px solid var(--green-bd); }
+    .header-badge { background: var(--green-bg); color: var(--green); font-size: 0.72rem; font-weight: 700; padding: 3px 10px; border-radius: 99px; border: 1px solid var(--green-bd); }
 
-    main { max-width: 960px; margin: 0 auto; padding: 40px 24px 80px; }
+    /* ── LAYOUT ── */
+    .layout { display: flex; flex: 1; }
 
-    .page-title { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 900; letter-spacing: -0.5px; margin-bottom: 4px; }
-    .page-sub { color: var(--muted); margin-bottom: 36px; }
+    /* ── SIDEBAR ── */
+    aside { width: var(--sidebar); background: #fff; border-right: 1px solid var(--border); padding: 28px 0; position: sticky; top: 60px; height: calc(100vh - 60px); overflow-y: auto; flex-shrink: 0; }
+    .nav-section { padding: 0 16px 24px; }
+    .nav-section-label { font-size: 0.65rem; font-weight: 700; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; padding: 0 8px; margin-bottom: 6px; }
+    .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600; color: var(--muted); transition: all 0.15s; margin-bottom: 2px; border: none; background: none; width: 100%; text-align: left; font-family: inherit; }
+    .nav-item:hover { background: var(--bg2); color: var(--text); }
+    .nav-item.active { background: var(--green-bg); color: var(--green); }
+    .nav-item .icon { font-size: 1rem; width: 20px; text-align: center; flex-shrink: 0; }
+    .nav-divider { border: none; border-top: 1px solid var(--border); margin: 12px 16px; }
 
-    .section-label { font-size: 0.7rem; font-weight: 700; color: var(--green); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 14px; }
+    /* ── MAIN ── */
+    main { flex: 1; padding: 36px 32px 60px; min-width: 0; }
+    .page { display: none; }
+    .page.active { display: block; }
 
-    .card { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); margin-bottom: 24px; }
-    .card h2 { font-size: 1rem; font-weight: 700; margin-bottom: 20px; }
+    .page-heading { font-size: 1.5rem; font-weight: 900; letter-spacing: -0.5px; margin-bottom: 4px; }
+    .page-sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 32px; }
 
-    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-    @media (max-width: 640px) { .two-col { grid-template-columns: 1fr; } }
+    /* ── CARDS ── */
+    .card { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+    .card-title { font-size: 0.7rem; font-weight: 700; color: var(--muted); letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 16px; }
 
-    .field { margin-bottom: 16px; }
-    .field label { display: block; font-size: 0.875rem; font-weight: 600; color: var(--text); margin-bottom: 4px; }
-    .field .hint { font-size: 0.75rem; color: var(--muted); margin-bottom: 6px; }
-    .field input { width: 100%; background: var(--bg2); border: 1.5px solid var(--border); border-radius: 8px; padding: 10px 14px; color: var(--text); font-size: 0.95rem; font-family: inherit; transition: border-color 0.2s, box-shadow 0.2s; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .grid3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+    @media (max-width: 800px) { .grid2 { grid-template-columns: 1fr; } .grid3 { grid-template-columns: 1fr 1fr; } aside { display: none; } }
+
+    /* ── FIELDS ── */
+    .field { margin-bottom: 14px; }
+    .field label { display: block; font-size: 0.82rem; font-weight: 600; margin-bottom: 3px; }
+    .field .hint { font-size: 0.72rem; color: var(--muted); margin-bottom: 5px; }
+    .field input { width: 100%; background: var(--bg2); border: 1.5px solid var(--border); border-radius: 8px; padding: 9px 12px; color: var(--text); font-size: 0.92rem; font-family: inherit; transition: border-color 0.2s, box-shadow 0.2s; }
     .field input:focus { outline: none; border-color: var(--green); box-shadow: 0 0 0 3px rgba(22,163,74,0.1); }
     .field input::placeholder { color: #d1d5db; }
 
-    .results-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 16px; margin-bottom: 20px; }
+    /* ── GAUGE ── */
+    .gauge-wrap { display: flex; flex-direction: column; align-items: center; padding: 20px 0 8px; }
+    .gauge-wrap svg { overflow: visible; }
+    .gauge-score { font-size: 2.4rem; font-weight: 900; color: var(--text); letter-spacing: -1px; margin-top: -4px; }
+    .gauge-label { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
+    .gauge-grade { font-size: 1rem; font-weight: 700; margin-top: 6px; }
 
-    .result-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 18px; }
-    .result-card .rlabel { font-size: 0.7rem; font-weight: 700; color: var(--muted); letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 6px; }
-    .result-card .rvalue { font-size: 1.6rem; font-weight: 800; color: var(--text); letter-spacing: -0.5px; line-height: 1; }
-    .result-card .rsub { font-size: 0.78rem; color: var(--muted); margin-top: 5px; }
-    .result-card.green { border-color: var(--green-bd); background: var(--green-bg); }
-    .result-card.green .rvalue { color: var(--green); }
-    .result-card.red { border-color: #fecaca; background: #fff5f5; }
-    .result-card.red .rvalue { color: #dc2626; }
+    /* ── RESULT CHIPS ── */
+    .chip { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+    .chip .clabel { font-size: 0.68rem; font-weight: 700; color: var(--muted); letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 4px; }
+    .chip .cvalue { font-size: 1.35rem; font-weight: 800; color: var(--text); letter-spacing: -0.3px; line-height: 1; }
+    .chip .csub { font-size: 0.72rem; color: var(--muted); margin-top: 4px; }
+    .chip.green { border-color: var(--green-bd); background: var(--green-bg); }
+    .chip.green .cvalue { color: var(--green); }
+    .chip.red { border-color: #fecaca; background: #fff5f5; }
+    .chip.red .cvalue { color: #dc2626; }
 
-    .grade-box { display: flex; align-items: center; gap: 20px; background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 20px 24px; }
-    .grade-circle { width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; font-weight: 900; flex-shrink: 0; }
-    .grade-text .glabel { font-size: 0.7rem; font-weight: 700; color: var(--muted); letter-spacing: 0.8px; text-transform: uppercase; }
-    .grade-text .gtitle { font-size: 1rem; font-weight: 700; margin-top: 2px; }
-    .grade-text .gtip { font-size: 0.82rem; color: var(--muted); margin-top: 3px; }
+    /* ── CALC OUTPUT ── */
+    .calc-out { background: var(--green-bg); border: 1px solid var(--green-bd); border-radius: 10px; padding: 18px 20px; margin-top: 14px; }
+    .calc-out .colabel { font-size: 0.68rem; font-weight: 700; color: var(--green); letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 3px; }
+    .calc-out .covalue { font-size: 1.8rem; font-weight: 900; color: var(--green); letter-spacing: -0.5px; }
+    .calc-out .cosub { font-size: 0.78rem; color: #15803d; margin-top: 3px; }
+    .calc-out.plain { background: var(--bg2); border-color: var(--border); }
+    .calc-out.plain .colabel { color: var(--muted); }
+    .calc-out.plain .covalue { color: var(--text); }
+    .calc-out.plain .cosub { color: var(--muted); }
 
-    .empty { color: var(--muted); font-size: 0.9rem; text-align: center; padding: 28px 16px; background: var(--bg2); border-radius: 8px; border: 1px dashed var(--border); }
+    .empty-state { color: var(--muted); font-size: 0.88rem; text-align: center; padding: 24px 16px; background: var(--bg2); border-radius: 8px; border: 1px dashed var(--border); }
 
-    .divider { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
-
-    .btn-row { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; align-items: center; }
-    .btn { padding: 10px 22px; border-radius: 8px; font-size: 0.875rem; font-weight: 700; cursor: pointer; border: none; font-family: inherit; transition: all 0.15s; }
-    .btn-green { background: var(--green); color: #fff; }
-    .btn-green:hover { background: #15803d; }
+    /* ── BUTTONS ── */
+    .btn-row { display: flex; gap: 10px; align-items: center; margin-top: 18px; flex-wrap: wrap; }
+    .btn { padding: 9px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; border: none; font-family: inherit; transition: all 0.15s; }
     .btn-ghost { background: transparent; color: var(--muted); border: 1.5px solid var(--border); }
     .btn-ghost:hover { border-color: #9ca3af; color: var(--text); }
-    .saved { font-size: 0.75rem; color: var(--green); font-weight: 600; opacity: 0; transition: opacity 0.3s; }
-    .saved.show { opacity: 1; }
-
-    .calc-output { background: var(--green-bg); border: 1px solid var(--green-bd); border-radius: 10px; padding: 18px 22px; margin-top: 16px; }
-    .calc-output .co-label { font-size: 0.7rem; font-weight: 700; color: var(--green); letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 4px; }
-    .calc-output .co-value { font-size: 1.8rem; font-weight: 900; color: var(--green); letter-spacing: -0.5px; }
-    .calc-output .co-sub { font-size: 0.8rem; color: #15803d; margin-top: 3px; }
-    .calc-output.neutral { background: var(--bg2); border-color: var(--border); }
-    .calc-output.neutral .co-label { color: var(--muted); }
-    .calc-output.neutral .co-value { color: var(--text); }
-    .calc-output.neutral .co-sub { color: var(--muted); }
-
-    footer { text-align: center; color: var(--muted); font-size: 0.8rem; padding: 24px; border-top: 1px solid var(--border); background: #fff; }
-    footer strong { color: var(--green); }
+    .saved-tag { font-size: 0.72rem; color: var(--green); font-weight: 600; opacity: 0; transition: opacity 0.3s; }
+    .saved-tag.show { opacity: 1; }
   </style>
 </head>
 <body>
 
 <header>
   <div class="logo">Profit<span>Pulse</span></div>
-  <div class="header-badge">✦ Your Business Dashboard</div>
+  <div class="header-badge">✦ Business Dashboard</div>
 </header>
 
-<main>
-  <div class="page-title">Business Dashboard</div>
-  <p class="page-sub">Enter your business numbers once — everything calculates instantly.</p>
+<div class="layout">
 
-  <!-- CORE INPUTS + FULL DASHBOARD -->
-  <div class="two-col">
-    <div class="card">
-      <div class="section-label">Your Business Numbers</div>
+  <!-- SIDEBAR -->
+  <aside>
+    <div class="nav-section">
+      <div class="nav-section-label">Tools</div>
+      <button class="nav-item active" onclick="showPage('dashboard', this)">
+        <span class="icon">📊</span> Dashboard
+      </button>
+      <button class="nav-item" onclick="showPage('pricing', this)">
+        <span class="icon">💰</span> Pricing Calculator
+      </button>
+      <button class="nav-item" onclick="showPage('breakeven', this)">
+        <span class="icon">📉</span> Break-Even
+      </button>
+      <button class="nav-item" onclick="showPage('margin', this)">
+        <span class="icon">📈</span> Margin Calculator
+      </button>
+    </div>
+    <hr class="nav-divider">
+    <div class="nav-section">
+      <div class="nav-section-label">Account</div>
+      <button class="nav-item" onclick="resetAll()">
+        <span class="icon">🔄</span> Reset All Data
+      </button>
+    </div>
+  </aside>
 
-      <div class="field">
-        <label>Monthly Fixed Costs ($)</label>
-        <div class="hint">Rent, salaries, subscriptions — costs you pay no matter what</div>
-        <input type="number" id="fixedCosts" placeholder="e.g. 2000" min="0">
-      </div>
-      <div class="field">
-        <label>Variable Cost Per Sale ($)</label>
-        <div class="hint">Materials, shipping, fees — cost per unit sold</div>
-        <input type="number" id="varCost" placeholder="e.g. 8" min="0">
-      </div>
-      <div class="field">
-        <label>Your Selling Price ($)</label>
-        <div class="hint">What you charge per product or service</div>
-        <input type="number" id="price" placeholder="e.g. 25" min="0">
-      </div>
-      <div class="field">
-        <label>Monthly Sales Volume</label>
-        <div class="hint">How many units or clients per month right now</div>
-        <input type="number" id="sales" placeholder="e.g. 100" min="0">
-      </div>
-      <div class="field">
-        <label>Monthly Income Goal ($)</label>
-        <div class="hint">What you want to take home after all costs</div>
-        <input type="number" id="goal" placeholder="e.g. 3000" min="0">
-      </div>
+  <!-- MAIN CONTENT -->
+  <main>
 
-      <div class="btn-row">
-        <button class="btn btn-ghost" onclick="resetDashboard()">Reset</button>
-        <span class="saved" id="savedNotice">Saved ✓</span>
+    <!-- ── PAGE: DASHBOARD ── -->
+    <div class="page active" id="page-dashboard">
+      <div class="page-heading">Business Dashboard</div>
+      <p class="page-sub">Enter your numbers — everything updates instantly and saves automatically.</p>
+
+      <div class="grid2">
+
+        <!-- Inputs -->
+        <div class="card">
+          <div class="card-title">Your Numbers</div>
+          <div class="field">
+            <label>Monthly Fixed Costs ($)</label>
+            <div class="hint">Rent, salaries, subscriptions</div>
+            <input type="number" id="fixedCosts" placeholder="e.g. 2000" min="0">
+          </div>
+          <div class="field">
+            <label>Variable Cost Per Sale ($)</label>
+            <div class="hint">Materials, shipping, fees per unit</div>
+            <input type="number" id="varCost" placeholder="e.g. 8" min="0">
+          </div>
+          <div class="field">
+            <label>Your Selling Price ($)</label>
+            <div class="hint">What you charge per product or service</div>
+            <input type="number" id="price" placeholder="e.g. 25" min="0">
+          </div>
+          <div class="field">
+            <label>Monthly Sales Volume</label>
+            <div class="hint">How many units or clients per month</div>
+            <input type="number" id="sales" placeholder="e.g. 100" min="0">
+          </div>
+          <div class="field">
+            <label>Monthly Income Goal ($)</label>
+            <div class="hint">What you want to take home after costs</div>
+            <input type="number" id="goal" placeholder="e.g. 3000" min="0">
+          </div>
+          <div class="btn-row">
+            <button class="btn btn-ghost" onclick="resetDashboard()">Reset</button>
+            <span class="saved-tag" id="savedNotice">Saved ✓</span>
+          </div>
+        </div>
+
+        <!-- Gauge + Results -->
+        <div>
+          <div class="card" style="margin-bottom:16px;">
+            <div class="card-title">Business Health Score</div>
+            <div class="gauge-wrap">
+              <svg id="gaugeSvg" width="200" height="110" viewBox="0 0 200 110">
+                <!-- Track -->
+                <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#e5e7eb" stroke-width="16" stroke-linecap="round"/>
+                <!-- Fill -->
+                <path id="gaugeArc" d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#e5e7eb" stroke-width="16" stroke-linecap="round" stroke-dasharray="251.2" stroke-dashoffset="251.2"/>
+              </svg>
+              <div class="gauge-score" id="gaugeScore">—</div>
+              <div class="gauge-label">Health Score</div>
+              <div class="gauge-grade" id="gaugeGrade"></div>
+            </div>
+          </div>
+
+          <div id="resultsArea">
+            <div class="empty-state">Fill in your numbers to see results.</div>
+          </div>
+        </div>
+
       </div>
     </div>
 
-    <div>
-      <div class="card">
-        <div class="section-label">Your Results</div>
-        <div id="resultsArea">
-          <div class="empty">Fill in your numbers to see your results.</div>
-        </div>
-      </div>
+    <!-- ── PAGE: PRICING CALCULATOR ── -->
+    <div class="page" id="page-pricing">
+      <div class="page-heading">Pricing Calculator</div>
+      <p class="page-sub">What should you charge? Enter your cost and target margin to find out.</p>
 
-      <div class="card">
-        <div class="section-label">Business Health Grade</div>
-        <div id="gradeArea">
-          <div class="empty">Enter your numbers to get your grade.</div>
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">Your Inputs</div>
+          <div class="field">
+            <label>Cost Per Unit / Service ($)</label>
+            <div class="hint">What it costs you to deliver one sale</div>
+            <input type="number" id="pc_cost" placeholder="e.g. 12" min="0">
+          </div>
+          <div class="field">
+            <label>Target Profit Margin (%)</label>
+            <div class="hint">What % of each sale should be profit (20–50% is common)</div>
+            <input type="number" id="pc_margin" placeholder="e.g. 40" min="1" max="99">
+          </div>
+          <div class="field">
+            <label>Monthly Overhead ($) <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
+            <div class="hint">Fixed costs to spread across your sales volume</div>
+            <input type="number" id="pc_overhead" placeholder="e.g. 500" min="0">
+          </div>
+          <div class="field">
+            <label>Expected Monthly Sales</label>
+            <div class="hint">How many units you expect to sell</div>
+            <input type="number" id="pc_units" placeholder="e.g. 50" min="1">
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Your Results</div>
+          <div id="pricingResult">
+            <div class="empty-state">Fill in your cost and margin to see your recommended price.</div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <hr class="divider">
+    <!-- ── PAGE: BREAK-EVEN ── -->
+    <div class="page" id="page-breakeven">
+      <div class="page-heading">Break-Even Calculator</div>
+      <p class="page-sub">How many sales do you need each month just to cover your costs?</p>
 
-  <!-- PRICING CALCULATOR -->
-  <div class="card">
-    <div class="section-label">Pricing Calculator</div>
-    <h2>What Should I Charge?</h2>
-    <p style="color:var(--muted); font-size:0.9rem; margin-bottom:20px;">Enter your cost and target margin — see the minimum price you should charge.</p>
-    <div class="two-col">
-      <div>
-        <div class="field">
-          <label>Cost Per Unit / Service ($)</label>
-          <div class="hint">What it actually costs you to deliver one sale</div>
-          <input type="number" id="pc_cost" placeholder="e.g. 12" min="0">
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">Your Inputs</div>
+          <div class="field">
+            <label>Monthly Fixed Costs ($)</label>
+            <div class="hint">Rent, salaries, subscriptions — everything you pay no matter what</div>
+            <input type="number" id="be_fixed" placeholder="e.g. 1500" min="0">
+          </div>
+          <div class="field">
+            <label>Selling Price Per Unit ($)</label>
+            <input type="number" id="be_price" placeholder="e.g. 30" min="0">
+          </div>
+          <div class="field">
+            <label>Variable Cost Per Unit ($)</label>
+            <div class="hint">Materials, shipping, fees per sale</div>
+            <input type="number" id="be_var" placeholder="e.g. 10" min="0">
+          </div>
         </div>
-        <div class="field">
-          <label>Your Target Profit Margin (%)</label>
-          <div class="hint">What % of each sale should be profit (20–50% is common)</div>
-          <input type="number" id="pc_margin" placeholder="e.g. 40" min="1" max="99">
-        </div>
-        <div class="field">
-          <label>Monthly Overhead to Cover ($) <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
-          <div class="hint">Fixed costs to spread across your sales volume</div>
-          <input type="number" id="pc_overhead" placeholder="e.g. 500" min="0">
-        </div>
-        <div class="field">
-          <label>Expected Monthly Sales</label>
-          <div class="hint">How many units you expect to sell</div>
-          <input type="number" id="pc_units" placeholder="e.g. 50" min="1">
-        </div>
-      </div>
-      <div id="pricingResult">
-        <div class="empty">Fill in your cost and margin to see your recommended price.</div>
-      </div>
-    </div>
-  </div>
 
-  <hr class="divider">
-
-  <!-- STANDALONE CALCULATORS ROW -->
-  <div class="two-col">
-
-    <!-- Break-Even Standalone -->
-    <div class="card">
-      <div class="section-label">Break-Even Calculator</div>
-      <h2>How Many Sales to Break Even?</h2>
-      <div class="field">
-        <label>Monthly Fixed Costs ($)</label>
-        <input type="number" id="be_fixed" placeholder="e.g. 1500" min="0">
-      </div>
-      <div class="field">
-        <label>Selling Price Per Unit ($)</label>
-        <input type="number" id="be_price" placeholder="e.g. 30" min="0">
-      </div>
-      <div class="field">
-        <label>Variable Cost Per Unit ($)</label>
-        <input type="number" id="be_var" placeholder="e.g. 10" min="0">
-      </div>
-      <div id="beResult">
-        <div class="empty" style="margin-top:12px;">Enter numbers above.</div>
+        <div class="card">
+          <div class="card-title">Your Results</div>
+          <div id="beResult">
+            <div class="empty-state">Enter your numbers to see your break-even point.</div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Margin Standalone -->
-    <div class="card">
-      <div class="section-label">Profit Margin Calculator</div>
-      <h2>What's My Profit Margin?</h2>
-      <div class="field">
-        <label>Selling Price ($)</label>
-        <input type="number" id="pm_price" placeholder="e.g. 50" min="0">
-      </div>
-      <div class="field">
-        <label>Cost Per Sale ($)</label>
-        <input type="number" id="pm_cost" placeholder="e.g. 20" min="0">
-      </div>
-      <div id="pmResult">
-        <div class="empty" style="margin-top:12px;">Enter numbers above.</div>
+    <!-- ── PAGE: MARGIN ── -->
+    <div class="page" id="page-margin">
+      <div class="page-heading">Profit Margin Calculator</div>
+      <p class="page-sub">See exactly how much profit you make on every single sale.</p>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">Your Inputs</div>
+          <div class="field">
+            <label>Selling Price ($)</label>
+            <input type="number" id="pm_price" placeholder="e.g. 50" min="0">
+          </div>
+          <div class="field">
+            <label>Cost Per Sale ($)</label>
+            <div class="hint">Variable cost — materials, fees, shipping</div>
+            <input type="number" id="pm_cost" placeholder="e.g. 20" min="0">
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Your Results</div>
+          <div id="pmResult">
+            <div class="empty-state">Enter your price and cost to see your margin.</div>
+          </div>
+        </div>
       </div>
     </div>
 
-  </div>
-
-</main>
-
-<footer>© 2026 <strong>ProfitPulse</strong> — Know your numbers. Run a better business.</footer>
+  </main>
+</div>
 
 <script>
-  // ── DASHBOARD ──────────────────────────────────────────────
+  // ── NAV ──────────────────────────────────────────────────
+  function showPage(id, btn) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    if (btn) btn.classList.add('active');
+  }
+
+  // ── GAUGE ────────────────────────────────────────────────
+  function setGauge(score, color, gradeText) {
+    const arc = document.getElementById('gaugeArc');
+    const total = 251.2;
+    const offset = total - (score / 100) * total;
+    arc.setAttribute('stroke', color);
+    arc.style.strokeDashoffset = offset;
+    document.getElementById('gaugeScore').textContent = Math.round(score);
+    document.getElementById('gaugeGrade').textContent = gradeText;
+    document.getElementById('gaugeGrade').style.color = color;
+  }
+
+  function resetGauge() {
+    const arc = document.getElementById('gaugeArc');
+    arc.setAttribute('stroke', '#e5e7eb');
+    arc.style.strokeDashoffset = 251.2;
+    document.getElementById('gaugeScore').textContent = '—';
+    document.getElementById('gaugeGrade').textContent = '';
+  }
+
+  // ── HELPERS ──────────────────────────────────────────────
+  function fmt(n) { return '$' + Math.round(n).toLocaleString(); }
+
+  // ── DASHBOARD ────────────────────────────────────────────
   const dashFields = ['fixedCosts','varCost','price','sales','goal'];
 
   function loadDashboard() {
@@ -251,24 +353,30 @@
   }
 
   function saveDashboard() {
-    dashFields.forEach(id => {
-      localStorage.setItem('pp_' + id, document.getElementById(id).value);
-    });
+    dashFields.forEach(id => localStorage.setItem('pp_' + id, document.getElementById(id).value));
     const n = document.getElementById('savedNotice');
     n.classList.add('show');
     setTimeout(() => n.classList.remove('show'), 1500);
   }
 
   function resetDashboard() {
-    dashFields.forEach(id => {
-      document.getElementById(id).value = '';
-      localStorage.removeItem('pp_' + id);
-    });
-    document.getElementById('resultsArea').innerHTML = '<div class="empty">Fill in your numbers to see your results.</div>';
-    document.getElementById('gradeArea').innerHTML = '<div class="empty">Enter your numbers to get your grade.</div>';
+    dashFields.forEach(id => { document.getElementById(id).value = ''; localStorage.removeItem('pp_' + id); });
+    document.getElementById('resultsArea').innerHTML = '<div class="empty-state">Fill in your numbers to see results.</div>';
+    resetGauge();
   }
 
-  function fmt(n) { return '$' + Math.round(n).toLocaleString(); }
+  function resetAll() {
+    if (!confirm('Reset all saved data?')) return;
+    localStorage.clear();
+    resetDashboard();
+    ['pc_cost','pc_margin','pc_overhead','pc_units','be_fixed','be_price','be_var','pm_price','pm_cost'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = '';
+    });
+    document.getElementById('pricingResult').innerHTML = '<div class="empty-state">Fill in your cost and margin to see your recommended price.</div>';
+    document.getElementById('beResult').innerHTML = '<div class="empty-state">Enter your numbers to see your break-even point.</div>';
+    document.getElementById('pmResult').innerHTML = '<div class="empty-state">Enter your price and cost to see your margin.</div>';
+  }
 
   function calcDashboard() {
     saveDashboard();
@@ -278,162 +386,151 @@
     const sales = parseFloat(document.getElementById('sales').value)      || 0;
     const goal  = parseFloat(document.getElementById('goal').value)       || 0;
 
-    if (price <= 0 && fixed <= 0) return;
+    if (price <= 0 && fixed <= 0) { resetGauge(); return; }
 
-    const contrib      = price - varC;
-    const breakEven    = contrib > 0 ? Math.ceil(fixed / contrib) : null;
-    const revenue      = price * sales;
-    const totalVarCost = varC * sales;
-    const profit       = revenue - totalVarCost - fixed;
-    const marginPct    = price > 0 ? (contrib / price) * 100 : 0;
-    const forGoal      = contrib > 0 ? Math.ceil((fixed + goal) / contrib) : null;
+    const contrib   = price - varC;
+    const breakEven = contrib > 0 ? Math.ceil(fixed / contrib) : null;
+    const revenue   = price * sales;
+    const profit    = revenue - (varC * sales) - fixed;
+    const marginPct = price > 0 ? (contrib / price) * 100 : 0;
+    const forGoal   = contrib > 0 && goal > 0 ? Math.ceil((fixed + goal) / contrib) : null;
 
-    let html = '<div class="results-grid">';
+    // score 0–100
+    let score = 0;
+    if (marginPct >= 50) score += 40;
+    else if (marginPct >= 30) score += 28;
+    else if (marginPct >= 15) score += 16;
+    else score += 4;
+    if (profit > 0) score += 30;
+    else if (profit === 0) score += 10;
+    if (breakEven !== null && sales > 0) {
+      const ratio = sales / breakEven;
+      score += Math.min(30, Math.round(ratio * 20));
+    }
+    score = Math.min(100, Math.max(0, score));
 
-    html += `<div class="result-card ${profit >= 0 ? 'green' : 'red'}">
-      <div class="rlabel">Monthly Profit / Loss</div>
-      <div class="rvalue">${fmt(profit)}</div>
-      <div class="rsub">${profit >= 0 ? 'Currently profitable' : 'Currently losing money'}</div>
+    const g = getGrade(marginPct, breakEven, sales, profit);
+    setGauge(score, g.color, g.title);
+
+    let html = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">';
+
+    html += `<div class="chip ${profit >= 0 ? 'green' : 'red'}">
+      <div class="clabel">Monthly Profit</div>
+      <div class="cvalue">${fmt(profit)}</div>
+      <div class="csub">${profit >= 0 ? 'Profitable' : 'Losing money'}</div>
     </div>`;
 
-    html += `<div class="result-card">
-      <div class="rlabel">Break-Even Sales</div>
-      <div class="rvalue">${breakEven !== null ? breakEven.toLocaleString() : '—'}</div>
-      <div class="rsub">units/sales to cover all costs</div>
+    html += `<div class="chip">
+      <div class="clabel">Break-Even</div>
+      <div class="cvalue">${breakEven !== null ? breakEven.toLocaleString() : '—'}</div>
+      <div class="csub">sales to cover costs</div>
     </div>`;
 
-    html += `<div class="result-card">
-      <div class="rlabel">Profit Margin</div>
-      <div class="rvalue">${marginPct.toFixed(1)}%</div>
-      <div class="rsub">profit on every sale</div>
+    html += `<div class="chip">
+      <div class="clabel">Profit Margin</div>
+      <div class="cvalue">${marginPct.toFixed(1)}%</div>
+      <div class="csub">per sale</div>
     </div>`;
 
-    html += `<div class="result-card">
-      <div class="rlabel">Monthly Revenue</div>
-      <div class="rvalue">${fmt(revenue)}</div>
-      <div class="rsub">at current volume</div>
+    html += `<div class="chip">
+      <div class="clabel">Monthly Revenue</div>
+      <div class="cvalue">${fmt(revenue)}</div>
+      <div class="csub">at current volume</div>
     </div>`;
 
-    if (goal > 0 && forGoal !== null) {
+    if (forGoal !== null) {
       const diff = forGoal - sales;
-      html += `<div class="result-card green" style="grid-column:1/-1">
-        <div class="rlabel">Sales Needed to Hit Your Goal</div>
-        <div class="rvalue">${forGoal.toLocaleString()} sales/month</div>
-        <div class="rsub">to take home ${fmt(goal)} — you're at ${sales} sales (${diff > 0 ? diff + ' more needed' : 'goal already reached! 🎉'})</div>
+      html += `<div class="chip green" style="grid-column:1/-1">
+        <div class="clabel">Goal: ${fmt(goal)}/month</div>
+        <div class="cvalue">${forGoal.toLocaleString()} sales needed</div>
+        <div class="csub">${diff > 0 ? diff + ' more sales per month to get there' : '🎉 You\'ve already hit your goal!'}</div>
       </div>`;
     }
 
     html += '</div>';
+    html += `<div style="margin-top:12px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-size:0.8rem;color:var(--muted);">
+      <strong style="color:${g.color}">${g.letter} — ${g.title}:</strong> ${g.tip}
+    </div>`;
+
     document.getElementById('resultsArea').innerHTML = html;
-
-    const g = grade(marginPct, breakEven, sales, profit);
-    document.getElementById('gradeArea').innerHTML = `
-      <div class="grade-box">
-        <div class="grade-circle" style="background:${g.bg};color:${g.color}">${g.letter}</div>
-        <div class="grade-text">
-          <div class="glabel">Health Grade</div>
-          <div class="gtitle" style="color:${g.color}">${g.title}</div>
-          <div class="gtip">${g.tip}</div>
-        </div>
-      </div>`;
   }
 
-  function grade(margin, be, sales, profit) {
+  function getGrade(margin, be, sales, profit) {
     if (margin >= 50 && profit > 0 && (be === null || sales >= be))
-      return { letter:'A', title:'Excellent', bg:'#dcfce7', color:'#16a34a', tip:'Strong margins and profitable. Keep scaling.' };
+      return { letter:'A', title:'Excellent', color:'#16a34a', tip:'Strong margins and profitable. Keep scaling.' };
     if (margin >= 30 && profit > 0)
-      return { letter:'B', title:'Healthy', bg:'#f0fdf4', color:'#16a34a', tip:'Solid foundation. Look for ways to grow margin.' };
+      return { letter:'B', title:'Healthy', color:'#16a34a', tip:'Solid. Look for ways to grow your margin.' };
     if (margin >= 15 && profit >= 0)
-      return { letter:'C', title:'Okay', bg:'#fefce8', color:'#ca8a04', tip:'Thin margins. Consider raising prices or cutting variable costs.' };
+      return { letter:'C', title:'Okay', color:'#ca8a04', tip:'Thin margins. Raise prices or cut variable costs.' };
     if (profit < 0)
-      return { letter:'D', title:'At Risk', bg:'#fff7ed', color:'#ea580c', tip:'Losing money monthly. Raise prices or cut fixed costs urgently.' };
-    return { letter:'F', title:'Critical', bg:'#fff5f5', color:'#dc2626', tip:'Very low margins. This model needs restructuring.' };
+      return { letter:'D', title:'At Risk', color:'#ea580c', tip:'Losing money monthly. Act quickly.' };
+    return { letter:'F', title:'Critical', color:'#dc2626', tip:'Very low margins. Model needs restructuring.' };
   }
 
-  dashFields.forEach(id => {
-    document.getElementById(id).addEventListener('input', calcDashboard);
-  });
+  dashFields.forEach(id => document.getElementById(id).addEventListener('input', calcDashboard));
 
-  // ── PRICING CALCULATOR ────────────────────────────────────
+  // ── PRICING CALC ─────────────────────────────────────────
   function calcPricing() {
     const cost     = parseFloat(document.getElementById('pc_cost').value)     || 0;
     const margin   = parseFloat(document.getElementById('pc_margin').value)   || 0;
     const overhead = parseFloat(document.getElementById('pc_overhead').value) || 0;
     const units    = parseFloat(document.getElementById('pc_units').value)    || 1;
-
     if (cost <= 0 || margin <= 0 || margin >= 100) return;
-
-    const costWithOverhead = cost + (overhead / units);
-    const recommended = costWithOverhead / (1 - margin / 100);
-    const profitPerSale = recommended - costWithOverhead;
-
+    const fullCost = cost + (overhead / units);
+    const rec      = fullCost / (1 - margin / 100);
+    const profitPer = rec - fullCost;
     document.getElementById('pricingResult').innerHTML = `
-      <div class="calc-output">
-        <div class="co-label">Recommended Price</div>
-        <div class="co-value">${fmt(recommended)}</div>
-        <div class="co-sub">Profit per sale: ${fmt(profitPerSale)} · Margin: ${margin}%</div>
+      <div class="calc-out">
+        <div class="colabel">Recommended Price</div>
+        <div class="covalue">${fmt(rec)}</div>
+        <div class="cosub">Profit per sale: ${fmt(profitPer)} · Margin: ${margin}%</div>
       </div>
-      <div class="calc-output neutral" style="margin-top:12px;">
-        <div class="co-label">Monthly Profit at ${units} Sales</div>
-        <div class="co-value">${fmt(profitPerSale * units - overhead)}</div>
-        <div class="co-sub">after variable costs and overhead</div>
+      <div class="calc-out plain" style="margin-top:12px;">
+        <div class="colabel">Monthly Profit at ${units} Sales</div>
+        <div class="covalue">${fmt(profitPer * units - overhead)}</div>
+        <div class="cosub">after all variable costs and overhead</div>
       </div>`;
   }
+  ['pc_cost','pc_margin','pc_overhead','pc_units'].forEach(id => document.getElementById(id).addEventListener('input', calcPricing));
 
-  ['pc_cost','pc_margin','pc_overhead','pc_units'].forEach(id => {
-    document.getElementById(id).addEventListener('input', calcPricing);
-  });
-
-  // ── BREAK-EVEN STANDALONE ─────────────────────────────────
+  // ── BREAK-EVEN ───────────────────────────────────────────
   function calcBreakEven() {
-    const fixed = parseFloat(document.getElementById('be_fixed').value) || 0;
-    const price = parseFloat(document.getElementById('be_price').value) || 0;
-    const varC  = parseFloat(document.getElementById('be_var').value)   || 0;
+    const fixed  = parseFloat(document.getElementById('be_fixed').value) || 0;
+    const price  = parseFloat(document.getElementById('be_price').value) || 0;
+    const varC   = parseFloat(document.getElementById('be_var').value)   || 0;
     const contrib = price - varC;
-
     if (price <= 0 || contrib <= 0) return;
-
     const be = Math.ceil(fixed / contrib);
-
     document.getElementById('beResult').innerHTML = `
-      <div class="calc-output" style="margin-top:12px;">
-        <div class="co-label">Break-Even Point</div>
-        <div class="co-value">${be.toLocaleString()} sales</div>
-        <div class="co-sub">Every sale after this is ${fmt(contrib)} pure profit</div>
+      <div class="calc-out">
+        <div class="colabel">Break-Even Point</div>
+        <div class="covalue">${be.toLocaleString()} sales</div>
+        <div class="cosub">Every sale after this is ${fmt(contrib)} pure profit</div>
+      </div>
+      <div class="calc-out plain" style="margin-top:12px;">
+        <div class="colabel">Contribution Per Sale</div>
+        <div class="covalue">${fmt(contrib)}</div>
+        <div class="cosub">price minus variable cost</div>
       </div>`;
   }
+  ['be_fixed','be_price','be_var'].forEach(id => document.getElementById(id).addEventListener('input', calcBreakEven));
 
-  ['be_fixed','be_price','be_var'].forEach(id => {
-    document.getElementById(id).addEventListener('input', calcBreakEven);
-  });
-
-  // ── MARGIN STANDALONE ─────────────────────────────────────
+  // ── MARGIN ───────────────────────────────────────────────
   function calcMargin() {
     const price = parseFloat(document.getElementById('pm_price').value) || 0;
     const cost  = parseFloat(document.getElementById('pm_cost').value)  || 0;
-
     if (price <= 0) return;
-
     const profit = price - cost;
     const margin = (profit / price) * 100;
     const markup = cost > 0 ? ((profit / cost) * 100) : null;
-
-    const cls = margin >= 30 ? '' : margin >= 15 ? 'neutral' : 'neutral';
-
     document.getElementById('pmResult').innerHTML = `
-      <div class="calc-output ${margin >= 30 ? '' : 'neutral'}" style="margin-top:12px;">
-        <div class="co-label">Profit Margin</div>
-        <div class="co-value">${margin.toFixed(1)}%</div>
-        <div class="co-sub">
-          Profit per sale: ${fmt(profit)}
-          ${markup !== null ? ' · Markup: ' + markup.toFixed(1) + '%' : ''}
-        </div>
+      <div class="calc-out ${margin >= 30 ? '' : 'plain'}">
+        <div class="colabel">Profit Margin</div>
+        <div class="covalue">${margin.toFixed(1)}%</div>
+        <div class="cosub">Profit per sale: ${fmt(profit)}${markup !== null ? ' · Markup: ' + markup.toFixed(1) + '%' : ''}</div>
       </div>`;
   }
-
-  ['pm_price','pm_cost'].forEach(id => {
-    document.getElementById(id).addEventListener('input', calcMargin);
-  });
+  ['pm_price','pm_cost'].forEach(id => document.getElementById(id).addEventListener('input', calcMargin));
 
   loadDashboard();
 </script>
