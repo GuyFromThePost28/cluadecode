@@ -168,6 +168,33 @@
 
     .grade-tip-bar { margin-top: 12px; background: linear-gradient(145deg,#fff,#f5f5f5); border-radius: 10px; padding: 11px 14px; font-size: 0.78rem; color: var(--muted);
       box-shadow: 0 2px 8px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.9); }
+
+    /* ── MONTHLY HISTORY ── */
+    .chart-card { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); margin-bottom: 24px; }
+    .chart-card h2 { font-size: 0.92rem; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+    .chart-card .chart-sub { font-size: 0.75rem; color: var(--muted); margin-bottom: 20px; }
+    .chart-legend { display: flex; gap: 16px; margin-bottom: 16px; }
+    .legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.72rem; font-weight: 600; color: var(--muted); }
+    .legend-dot { width: 10px; height: 3px; border-radius: 2px; }
+    .month-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+    .month-card { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); transition: box-shadow 0.15s; }
+    .month-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+    .month-card .mc-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .month-card .mc-name { font-size: 0.85rem; font-weight: 700; color: var(--text); }
+    .month-card .mc-grade { font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 99px; }
+    .month-card .mc-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+    .month-card .mc-row:last-child { margin-bottom: 0; }
+    .month-card .mc-label { font-size: 0.72rem; color: var(--muted); }
+    .month-card .mc-val { font-size: 0.88rem; font-weight: 700; color: var(--text); }
+    .month-card .mc-profit-pos { color: var(--green); }
+    .month-card .mc-profit-neg { color: #dc2626; }
+    .month-card .mc-divider { border: none; border-top: 1px solid var(--border); margin: 10px 0; }
+    .btn-save-month { padding: 8px 18px; border-radius: 7px; font-size: 0.8rem; font-weight: 700; cursor: pointer; border: 1.5px solid var(--green); background: var(--green-bg); color: var(--green); font-family: inherit; transition: all 0.15s; }
+    .btn-save-month:hover { background: var(--green); color: #fff; }
+    .save-toast { font-size: 0.72rem; color: var(--green); font-weight: 600; opacity: 0; transition: opacity 0.3s; margin-left: 6px; }
+    .save-toast.show { opacity: 1; }
+    .no-history { text-align: center; padding: 48px 24px; color: var(--muted); font-size: 0.9rem; }
+    .no-history strong { display: block; font-size: 1rem; color: var(--text); margin-bottom: 6px; }
   </style>
 </head>
 <body>
@@ -194,6 +221,9 @@
       </button>
       <button class="nav-item" onclick="showPage('margin', this)">
         <span class="icon">📈</span> Margin Calculator
+      </button>
+      <button class="nav-item" onclick="showPage('history', this)">
+        <span class="icon">📅</span> Monthly Progress
       </button>
     </div>
     <hr class="nav-divider">
@@ -271,7 +301,9 @@
           </div>
 
           <div class="input-card-footer">
-            <button class="btn-reset" onclick="resetDashboard()">Clear</button>
+            <button class="btn-save-month" onclick="saveMonth()">Save This Month</button>
+            <span class="save-toast" id="saveToast">Saved ✓</span>
+            <button class="btn-reset" style="margin-left:auto" onclick="resetDashboard()">Clear</button>
             <span class="saved-tag" id="savedNotice">Saved ✓</span>
           </div>
         </div>
@@ -384,6 +416,30 @@
           <div id="pmResult">
             <div class="empty-state">Enter your price and cost to see your margin.</div>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PAGE: MONTHLY PROGRESS ── -->
+    <div class="page" id="page-history">
+      <div class="page-heading">Monthly Progress</div>
+      <p class="page-sub">Hit "Save This Month" on your dashboard each month to track how your business grows over time.</p>
+
+      <div class="chart-card">
+        <h2>Profit & Revenue Over Time</h2>
+        <div class="chart-sub">Monthly profit (green) and revenue (blue dashed)</div>
+        <div class="chart-legend">
+          <div class="legend-item"><div class="legend-dot" style="background:var(--green);"></div> Profit</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#bfdbfe;height:2px;border-top:2px dashed #93c5fd;"></div> Revenue</div>
+        </div>
+        <div id="chartArea"><div class="no-history"><strong>No data yet</strong>Save your first month to start your chart.</div></div>
+      </div>
+
+      <div class="chart-card">
+        <h2>Month by Month</h2>
+        <div class="chart-sub">Your performance each saved month — newest first</div>
+        <div class="month-grid" id="monthGrid">
+          <div class="no-history"><strong>No months saved yet</strong>Go to Dashboard, fill in your numbers, then click "Save This Month".</div>
         </div>
       </div>
     </div>
@@ -604,7 +660,184 @@
   }
   ['pm_price','pm_cost'].forEach(id => document.getElementById(id).addEventListener('input', calcMargin));
 
+  // ── MONTHLY HISTORY ──────────────────────────────────────
+  const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const SHORT_MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  function saveMonth() {
+    const fixed  = parseFloat(document.getElementById('fixedCosts').value) || 0;
+    const varC   = parseFloat(document.getElementById('varCost').value)    || 0;
+    const price  = parseFloat(document.getElementById('price').value)      || 0;
+    const sales  = parseFloat(document.getElementById('sales').value)      || 0;
+    const goal   = parseFloat(document.getElementById('goal').value)       || 0;
+
+    if (price <= 0 && fixed <= 0) {
+      alert('Fill in your numbers on the dashboard first.');
+      return;
+    }
+
+    const now     = new Date();
+    const key     = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+    const label   = `${MONTH_NAMES[now.getMonth()]} ${now.getFullYear()}`;
+    const short   = `${SHORT_MONTHS[now.getMonth()]} ${String(now.getFullYear()).slice(2)}`;
+
+    const contrib = price - varC;
+    const revenue = price * sales;
+    const profit  = revenue - (varC * sales) - fixed;
+    const margin  = price > 0 ? (contrib / price) * 100 : 0;
+    const be      = contrib > 0 ? Math.ceil(fixed / contrib) : null;
+
+    let score = 0;
+    if (margin >= 50) score += 40; else if (margin >= 30) score += 28; else if (margin >= 15) score += 16; else score += 4;
+    if (profit > 0) score += 30; else if (profit === 0) score += 10;
+    if (be && sales > 0) score += Math.min(30, Math.round((sales / be) * 20));
+    score = Math.min(100, Math.max(0, score));
+
+    const g = getGrade(margin, be, sales, profit);
+
+    const entry = { key, label, short, revenue, profit, margin: Math.round(margin * 10) / 10, breakEven: be, sales, score, grade: g.letter, gradeColor: g.color, gradeTitle: g.title };
+
+    const history = getHistory();
+    const idx = history.findIndex(h => h.key === key);
+    if (idx >= 0) history[idx] = entry; else history.push(entry);
+    history.sort((a, b) => a.key.localeCompare(b.key));
+
+    localStorage.setItem('pp_history', JSON.stringify(history));
+
+    const toast = document.getElementById('saveToast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2000);
+
+    renderHistory();
+  }
+
+  function getHistory() {
+    try { return JSON.parse(localStorage.getItem('pp_history') || '[]'); } catch { return []; }
+  }
+
+  function renderHistory() {
+    const history = getHistory();
+    renderChart(history);
+    renderMonthCards(history);
+  }
+
+  function renderChart(history) {
+    const el = document.getElementById('chartArea');
+    if (history.length === 0) {
+      el.innerHTML = '<div class="no-history"><strong>No data yet</strong>Save your first month to start your chart.</div>';
+      return;
+    }
+    if (history.length === 1) {
+      el.innerHTML = '<div class="no-history"><strong>One month saved</strong>Save a second month to see your chart appear.</div>';
+      return;
+    }
+
+    const W = 600, H = 200;
+    const pad = { top: 20, right: 20, bottom: 36, left: 64 };
+    const iW = W - pad.left - pad.right;
+    const iH = H - pad.top - pad.bottom;
+
+    const profits  = history.map(h => h.profit);
+    const revenues = history.map(h => h.revenue);
+    const allVals  = [...profits, ...revenues];
+    const minV = Math.min(0, ...allVals);
+    const maxV = Math.max(...allVals);
+    const range = maxV - minV || 1;
+
+    const xOf = i => pad.left + (i / (history.length - 1)) * iW;
+    const yOf = v => pad.top + iH - ((v - minV) / range) * iH;
+
+    // Grid + Y labels
+    let grid = '';
+    for (let i = 0; i <= 4; i++) {
+      const y = pad.top + (iH / 4) * i;
+      const v = maxV - (range / 4) * i;
+      grid += `<line x1="${pad.left}" y1="${y}" x2="${pad.left + iW}" y2="${y}" stroke="#f3f4f6" stroke-width="1"/>`;
+      grid += `<text x="${pad.left - 8}" y="${y + 4}" text-anchor="end" font-size="10" fill="#9ca3af" font-family="system-ui">$${Math.round(v).toLocaleString()}</text>`;
+    }
+
+    // X labels
+    let xLabels = history.map((h, i) =>
+      `<text x="${xOf(i)}" y="${H - 6}" text-anchor="middle" font-size="10" fill="#9ca3af" font-family="system-ui">${h.short}</text>`
+    ).join('');
+
+    // Revenue line (dashed, light blue)
+    const revPts = history.map((h, i) => `${xOf(i)},${yOf(h.revenue)}`).join(' ');
+    // Profit line (solid green)
+    const profPts = history.map((h, i) => `${xOf(i)},${yOf(h.profit)}`).join(' ');
+
+    // Area fill under profit line
+    const areaPath = `M ${xOf(0)},${yOf(profits[0])} ` +
+      history.slice(1).map((h, i) => `L ${xOf(i+1)},${yOf(h.profit)}`).join(' ') +
+      ` L ${xOf(history.length-1)},${yOf(minV)} L ${xOf(0)},${yOf(minV)} Z`;
+
+    // Dots on profit line
+    const dots = history.map((h, i) =>
+      `<circle cx="${xOf(i)}" cy="${yOf(h.profit)}" r="4" fill="#16a34a" stroke="white" stroke-width="2"/>`
+    ).join('');
+
+    el.innerHTML = `
+      <svg viewBox="0 0 ${W} ${H}" width="100%" style="overflow:visible;display:block;">
+        ${grid}
+        <path d="${areaPath}" fill="rgba(34,197,94,0.06)"/>
+        <polyline points="${revPts}" fill="none" stroke="#93c5fd" stroke-width="1.5" stroke-dasharray="5,3"/>
+        <polyline points="${profPts}" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+        ${dots}
+        ${xLabels}
+      </svg>`;
+  }
+
+  function renderMonthCards(history) {
+    const el = document.getElementById('monthGrid');
+    if (history.length === 0) {
+      el.innerHTML = '<div class="no-history"><strong>No months saved yet</strong>Go to Dashboard, fill in your numbers, then click "Save This Month".</div>';
+      return;
+    }
+    const sorted = [...history].reverse();
+    el.innerHTML = sorted.map(h => {
+      const gradeBg  = h.grade === 'A' || h.grade === 'B' ? '#f0fdf4' : h.grade === 'C' ? '#fefce8' : '#fff5f5';
+      const gradeCl  = h.grade === 'A' || h.grade === 'B' ? '#16a34a' : h.grade === 'C' ? '#ca8a04' : '#dc2626';
+      const profCls  = h.profit >= 0 ? 'mc-profit-pos' : 'mc-profit-neg';
+      return `
+        <div class="month-card">
+          <div class="mc-header">
+            <div class="mc-name">${h.label}</div>
+            <div class="mc-grade" style="background:${gradeBg};color:${gradeCl}">${h.grade} — ${h.gradeTitle}</div>
+          </div>
+          <div class="mc-row">
+            <span class="mc-label">Revenue</span>
+            <span class="mc-val">${fmt(h.revenue)}</span>
+          </div>
+          <hr class="mc-divider">
+          <div class="mc-row">
+            <span class="mc-label">Profit</span>
+            <span class="mc-val ${profCls}">${fmt(h.profit)}</span>
+          </div>
+          <div class="mc-row">
+            <span class="mc-label">Margin</span>
+            <span class="mc-val">${h.margin}%</span>
+          </div>
+          <div class="mc-row">
+            <span class="mc-label">Sales</span>
+            <span class="mc-val">${h.sales.toLocaleString()}</span>
+          </div>
+          <div class="mc-row">
+            <span class="mc-label">Health Score</span>
+            <span class="mc-val" style="color:${h.gradeColor}">${h.score}/100</span>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  // update showPage to refresh history when navigating to it
+  const _origShowPage = showPage;
+  function showPage(id, btn) {
+    _origShowPage(id, btn);
+    if (id === 'history') renderHistory();
+  }
+
   loadDashboard();
+  renderHistory();
 </script>
 
 </body>
